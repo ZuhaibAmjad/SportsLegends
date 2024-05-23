@@ -7,6 +7,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 
 export default function Availibilty() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -44,6 +45,7 @@ export default function Availibilty() {
     to: [],
     days: [],
   });
+
   return (
     <div>
       <div className="px-3 my-5">
@@ -55,61 +57,52 @@ export default function Availibilty() {
           respect these rules.
         </p>
         {rules.map((rule) => (
-          <div className="text-md  my-3 p-3 bg-gray-200 flex justify-between">
+          <div
+            key={rule.resourceId}
+            className="text-md  my-3 p-3 bg-gray-200 rounded-1 flex justify-between"
+          >
             <div>
-              For
-              <Select
-                style={{
-                  backgroundColor: "transparent",
-                  maxHeight: "45px",
-                  // width: "100%",
-                  border: "none",
-                  maxWidth: "200px",
-                }}
-                labelId="select-multiple-checkbox-label"
-                id="select-multiple-checkbox"
-                multiple
-                size="small"
-                value={selectedItems}
-                // onChange={(e) =>
-                //   setSelectedItems(e.target.value)
-                // }
-                renderValue={(selected) => (
-                  <div className="flex flex-wrap">
-                    {resourceMap
-                      .filter((item) => selected.includes(item.resourceId))
-                      .map((item) => (
-                        <div key={item.resourceId} className="m-1">
-                          {item.resourceTitle}
-                        </div>
-                      ))}
-                  </div>
-                )}
-              >
-                {resourceMap.map((item) => (
-                  <MenuItem
-                    key={item.resourceId}
-                    value={item.resourceId}
-                    className="p-0 "
-                  >
-                    <Checkbox
-                      checked={selectedItems.includes(item.resourceId)}
-                      // onChange={() =>
-                      //   handleCheckboxChange(item)
-                      // }
-                      className=""
-                      size="small"
-                    />
-                    {item.resourceTitle}
-                  </MenuItem>
-                ))}
-              </Select>
+              For{" "}
+              <span>
+                <Select
+                  className="bg-transparent theme-color "
+                  labelId="select-multiple-checkbox-label"
+                  id="select-multiple-checkbox"
+                  multiple
+                  size="small"
+                  value={selectedItems}
+                  renderValue={(selected) => (
+                    <div className="flex flex-wrap">
+                      {resourceMap
+                        .filter((item) => selected.includes(item.resourceId))
+                        .map((item) => (
+                          <div key={item.resourceId} className="m-1">
+                            {item.resourceTitle}
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                >
+                  {resourceMap.map((item) => (
+                    <MenuItem
+                      key={item.resourceId}
+                      value={item.resourceId}
+                      className="p-0 "
+                    >
+                      <Checkbox
+                        checked={selectedItems.includes(item.resourceId)}
+                        className=""
+                        size="small"
+                      />
+                      {item.resourceTitle}
+                    </MenuItem>
+                  ))}
+                </Select>{" "}
+              </span>
               enforce a buffer time of
               <select
                 className="bg-transparent theme-color"
                 name="start"
-                // value={newEvent && newEvent.start}
-                // onChange={getEventData}
               >
                 {Array.from({ length: 48 }, (_, index) => {
                   const hours = Math.floor(index / 2);
@@ -127,15 +120,23 @@ export default function Availibilty() {
               betweeen bookings
             </div>
             <div className="">
-              <button className="bg-white p-2 mx-1">del</button>
-              <button className="bg-white p-2 mx-1">save</button>
+              <button
+                className="bg-green-400 hover:bg-green-700 text-white rounded-1 p-2 mx-1"
+                onClick={() => setRules(rules.filter((r) => r.resourceId !== rule.resourceId))}
+              >
+                <Delete sx={{ color: "white" }} />
+              </button>
             </div>
           </div>
         ))}
-        <button className="bg-green-400 p-2 text-white" onClick={handleAddRule}>
+        <button
+          className="bg-green-400 hover:bg-green-700 text-white rounded-1 p-2 mx-1"
+          onClick={handleAddRule}
+        >
           Add a Buffer Rule
         </button>
       </div>
     </div>
   );
 }
+

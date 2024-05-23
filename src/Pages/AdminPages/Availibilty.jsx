@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import InputBase from "@mui/material/InputBase";
 import { styled } from "@mui/material/styles";
-
+import { Delete } from "@mui/icons-material";
 import {
   Checkbox,
   FormControl,
@@ -143,7 +143,7 @@ export default function Availibilty() {
           and won't be bookable by users.
         </p>
         {rules.map((rule) => (
-          <div className="text-md  my-3 p-3 bg-gray-200 flex justify-between">
+          <div key={rule.resourceId} className="text-md  my-3 p-3 bg-gray-200 flex justify-between">
             <div>
               <Select
                 style={{
@@ -252,16 +252,13 @@ export default function Availibilty() {
                 <option value="11:00 PM">11:00 PM</option>
                 <option value="11:30 PM">11:30 PM</option>
               </select>
-              to
+              and
               <select
                 className="bg-transparent theme-color"
+                name="end"
                 // value={newEvent && newEvent.end}
                 // onChange={getEventData}
-                name="end"
               >
-                {/* <option value={newEvent && newEvent.end}>
-                    {newEvent && newEvent.end}
-                  </option> */}
                 <option value="12:00 AM">12:00 AM</option>
                 <option value="12:30 AM">12:30 AM</option>
                 <option value="1:00 AM">1:00 AM</option>
@@ -311,142 +308,23 @@ export default function Availibilty() {
                 <option value="11:00 PM">11:00 PM</option>
                 <option value="11:30 PM">11:30 PM</option>
               </select>
-              on
-              <Select
-                className="border-none"
-                labelId="select-multiple-checkbox-label"
-                id="select-multiple-checkbox"
-                multiple
-                size="small"
-                value={selectedItems}
-                // onChange={(e) =>
-                //   setSelectedItems(e.target.value)
-                // }
-                renderValue={(selected) => (
-                  <div className="flex flex-wrap">
-                    {resourceMap
-                      .filter((item) => selected.includes(item.resourceId))
-                      .map((item) => (
-                        <div key={item.resourceId} className="m-1">
-                          {item.resourceTitle}
-                        </div>
-                      ))}
-                  </div>
-                )}
-              >
-                <MenuItem key="Monday" value="Monday" className="pt-1 px-3 ">
-                  <Checkbox
-                    checked={selectedItems.includes("Monday")}
-                    // onChange={() =>
-                    //   handleCheckboxChange(item)
-                    // }
-                    className="p-0"
-                    size="small"
-                  />
-                  Monday
-                </MenuItem>
-                <MenuItem key="Tuesday" value="Tuesday" className="pt-1 px-3 ">
-                  <Checkbox
-                    checked={selectedItems.includes("Tuesday")}
-                    // onChange={() =>
-                    //   handleCheckboxChange(item)
-                    // }
-                    className="p-0"
-                    size="small"
-                  />
-                  Tuesday
-                </MenuItem>
-                <MenuItem
-                  key="Wednesday"
-                  value="Wednesday"
-                  className="pt-1 px-3 "
-                >
-                  <Checkbox
-                    checked={selectedItems.includes("Wednesday")}
-                    // onChange={() =>
-                    //   handleCheckboxChange(item)
-                    // }
-                    className="p-0"
-                    size="small"
-                  />
-                  Wednesday
-                </MenuItem>
-                <MenuItem
-                  key="Thursday"
-                  value="Thursday"
-                  className="pt-1 px-3 "
-                >
-                  <Checkbox
-                    checked={selectedItems.includes("Thursday")}
-                    // onChange={() =>
-                    //   handleCheckboxChange(item)
-                    // }
-                    className="p-0"
-                    size="small"
-                  />
-                  Thursday
-                </MenuItem>
-                <MenuItem key="Friday" value="Friday" className="pt-1 px-3 ">
-                  <Checkbox
-                    checked={selectedItems.includes("Friday")}
-                    // onChange={() =>
-                    //   handleCheckboxChange(item)
-                    // }
-                    className="p-0"
-                    size="small"
-                  />
-                  Friday
-                </MenuItem>
-                <MenuItem
-                  key="Saturday"
-                  value="Saturday"
-                  className="pt-1 px-3 "
-                >
-                  <Checkbox
-                    checked={selectedItems.includes("Saturday")}
-                    // onChange={() =>
-                    //   handleCheckboxChange(item)
-                    // }
-                    className="p-0"
-                    size="small"
-                  />
-                  Saturday
-                </MenuItem>
-                <MenuItem key="Sunday" value="Sunday" className="pt-1 px-3 ">
-                  <Checkbox
-                    checked={selectedItems.includes("Sunday")}
-                    // onChange={() =>
-                    //   handleCheckboxChange(item)
-                    // }
-                    className="p-0"
-                    size="small"
-                  />
-                  Sunday
-                </MenuItem>
-              </Select>
             </div>
-            <div className="">
-              <button className="bg-white p-2 mx-1">del</button>
-              <button className="bg-white p-2 mx-1">save</button>
+            <div className="px-4">
+            <button
+                className="bg-green-400 hover:bg-green-700 text-white rounded-1 p-2 mx-1"
+                onClick={() => setRules(rules.filter((r) => r.resourceId !== rule.resourceId))}
+              >
+                <Delete sx={{ color: "white" }} />
+              </button>
             </div>
           </div>
         ))}
-        <button className="bg-green-400 p-2 text-white" onClick={handleAddRule}>
-          Add more hours
+        <button
+          onClick={handleAddRule}
+          className="p-2 border my-2 bg-green-400 hover:bg-green-700 hover:text-white rounded-1 "
+        >
+          Add Rule
         </button>
-
-        <h3 className="text-xl font-semibold mt-5">SCHEDULER DISPLAY HOURS</h3>
-        <div className="text-md  my-3 p-3 bg-gray-200">
-          Show the hours to on the scheduler time axis.
-        </div>
-
-        <h3 className="text-xl font-semibold mt-5">
-          PUBLIC HOLIDAYS AND SEASONAL VARIATION
-        </h3>
-        <p className="text-md text-gray-600 my-3">
-          Use (recurring) unavailable bookings on your scheduler to flexibly
-          handle any exceptions to the above times. Learn more
-        </p>
       </div>
     </div>
   );

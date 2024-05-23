@@ -9,14 +9,13 @@ import AdminSideBar from "../../Components/AdminSideBar";
 import Navbar from "../../Components/Navbar";
 import Availibilty from "./Availibilty";
 import QuotaRules from "./QuotaRules";
-import BufferTime from "./BufferTime"
-import AddSpaces from "../../Components/AddSpaces"
-
+import BufferTime from "./BufferTime";
+import AddSpaces from "../../Components/AddSpaces";
 
 export default function Setting() {
   const [Show, setShow] = useState('spaces');
-
   const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 992);
+  const [transitionClass, setTransitionClass] = useState('opacity-100 translate-x-0');
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,6 +30,13 @@ export default function Setting() {
     };
   }, []);
 
+  const handleButtonClick = (component) => {
+    setTransitionClass('opacity-0 translate-x-full transition-opacity transition-transform duration-500');
+    setTimeout(() => {
+      setShow(component);
+      setTransitionClass('opacity-100 translate-x-0 transition-opacity transition-transform duration-500');
+    }, 500);
+  };
 
   return (
     <>
@@ -57,7 +63,7 @@ export default function Setting() {
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
                     Show === "spaces" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => setShow('spaces')}
+                  onClick={() => handleButtonClick('spaces')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faPencil} className="h-6" />
@@ -65,7 +71,7 @@ export default function Setting() {
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">Spaces</h3>
                     <p className="text-sm">
-                      Your bookables rooms, studios ,courts{" "}
+                      Your bookables rooms, studios, courts
                     </p>
                   </div>
                 </button>
@@ -73,7 +79,7 @@ export default function Setting() {
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
                     Show === "availibility" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => setShow('availibility')}
+                  onClick={() => handleButtonClick('availibility')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
@@ -89,7 +95,7 @@ export default function Setting() {
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
                     Show === "maps" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => setShow('maps')}
+                  onClick={() => handleButtonClick('maps')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
@@ -108,7 +114,7 @@ export default function Setting() {
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
                     Show === "condition" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => setShow('condition')}
+                  onClick={() => handleButtonClick('condition')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
@@ -124,7 +130,7 @@ export default function Setting() {
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
                     Show === "quota" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => setShow('quota')}
+                  onClick={() => handleButtonClick('quota')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
@@ -140,7 +146,7 @@ export default function Setting() {
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
                     Show === "buffer" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => setShow('buffer')}
+                  onClick={() => handleButtonClick('buffer')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
@@ -158,7 +164,7 @@ export default function Setting() {
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
                     Show === "window" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => setShow('window')}
+                  onClick={() => handleButtonClick('window')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
@@ -175,15 +181,14 @@ export default function Setting() {
               </div>
             </div>
           </div>
-          <div className="overflow-y-scroll w-2/3 px-4">
+          <div className={`overflow-y-scroll w-2/3 px-4 ${transitionClass}`}>
             {/* Content of the second div */}
             <div className="h-full">
               {/* Scrollable content goes here */}
-              {Show  === 'availibility'  &&  <Availibilty/> } 
-              {Show  === 'buffer'  &&  <BufferTime/> }
-              {Show  === 'quota'  &&  <QuotaRules/> }
-              {Show  === 'spaces'  && <AddSpaces/> }
-              {/* {Show  === ''  &&  <Availibilty/> } */}
+              {Show === 'availibility' && <Availibilty />}
+              {Show === 'buffer' && <BufferTime />}
+              {Show === 'quota' && <QuotaRules />}
+              {Show === 'spaces' && <AddSpaces />}
             </div>
           </div>
         </div>

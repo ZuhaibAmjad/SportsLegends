@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Alert, Slide, Snackbar } from "@mui/material";
+import { Alert, Slide, Snackbar, } from "@mui/material";
 import axios from "axios";
+import { QueueIcon} from "@mui/icons-material"
 
 export default function AddSpaces() {
   const [open, setOpen] = useState(false);
@@ -292,19 +293,19 @@ export default function AddSpaces() {
                   <textarea
                     type="text"
                     onChange={(e) => setNewSpace(e.target.value)}
-                    className="p-3 my-2 border"
+                    className="p-3 my-2 border-slate-500 rounded-1"
                     placeholder="Room 101
-Court 1"
+                  Court 1"
                   />
-                  <div className="flex">
+                  <div className="flex gap-2">
                     <button
                       onClick={Add}
-                      className="p-2 bg-green-400 text-white text-lg"
+                      className="px-3 py-2 bg-green-400 hover:bg-green-700 text-white text-lg rounded-1 "
                     >
-                      Add Space
+                    Add Space
                     </button>
                     <button
-                      className="p-2 border-gray-300"
+                      className="px-3 py-2 border-gray-300 hover:bg-slate-100 rounded-1"
                       onClick={closeDailog}
                     >
                       Close
@@ -323,20 +324,19 @@ Court 1"
           Your spaces are your core bookable resources. Select a space to edit
           it, or reposition them with drag and drop.
         </p>
-        <button className="bg-green-400 p-2" onClick={() => setAddSpace(true)}>
+        <button className="px-3 py-2 bg-green-400 hover:bg-green-700 text-white text-lg rounded-1 " onClick={() => setAddSpace(true)}>
           Add Spaces
         </button>
       </div>
       <div className="flex flex-wrap w-100">
-        <div className="w-full md:w-1/3 md:flex-none  pr-3">
-          <div className="border p-3">
+        <div className="w-full md:w-1/3 md:flex-none pr-3">
+          <div className="border p-3 rounded-1">
             {spaces.map((space) => (
               <button
-                className={` ${
-                  selectedSpace?._id === space._id
-                    ? "bg-gray-300"
-                    : "hover:bg-gray-200"
-                } w-100 p-2 text-start mb-1`}
+                className={` ${selectedSpace?._id === space._id
+                    ? "bg-gray-300 rounded-1"
+                    : "hover:bg-gray-200 rounded-1"
+                  } w-100 p-2 text-start mb-1`}
                 onClick={() => setSelectedSpace(space)}
               >
                 {space.name}
@@ -344,7 +344,7 @@ Court 1"
             ))}
           </div>
         </div>
-        <div className="w-full md:w-2/3 md:flex-grow bg-white border border-gray-300">
+        <div className="w-full md:w-2/3 md:flex-grow bg-white border border-gray-300 rounded-1">
           <div className="flex grid lg:grid-cols-2 md:grid-cols-1 mt-2 p-3 gap-x-3 ">
             <div className="space-y-2">
               <label className="text-sm" for="exampleInputEmail1">
@@ -353,7 +353,7 @@ Court 1"
               <div>
                 <input
                   type="text"
-                  class="form-control rounded-0"
+                  class="form-control rounded-1"
                   placeholder="Name"
                   value={selectedSpace && selectedSpace.name}
                   aria-label="Recipient's username"
@@ -390,7 +390,7 @@ Court 1"
               Description
             </label>
             <div>
-              <textarea className="w-full border p-2" rows="4" cols="50" />
+              <textarea className="w-full border p-2 rounded-1" rows="4" cols="50" />
             </div>
           </div>
           <div className="p-3 ">
@@ -399,7 +399,7 @@ Court 1"
             </label>
             <div>
               <button
-                className="p-2 border my-2"
+                className="p-2 border my-2 bg-green-400 hover:bg-green-700 hover:text-white rounded-1 "
                 onClick={() => setDeleteOption(!deleteOption)}
               >
                 {" "}
@@ -424,7 +424,7 @@ Court 1"
                 </Slide>
 
                 <textarea
-                  className="w-full border p-2"
+                  className="w-full border p-2 rounded-1"
                   onChange={verify}
                   rows="4"
                   cols="50"
@@ -450,12 +450,11 @@ Court 1"
                 )}
 
                 <button
-                  className={`p-2 border mt-4 ${
-                    deleteValue ===
-                    `Permanently delete ${selectedSpace.name} with bookings`
+                  className={`p-2 border mt-4 hover:bg-green-400 rounded-1 ${deleteValue ===
+                      `Permanently delete ${selectedSpace.name} with bookings`
                       ? "hover:bg-gray-300"
                       : ""
-                  }`}
+                    }`}
                   disabled={
                     deleteValue !==
                     `Permanently delete ${selectedSpace.name} with bookings`

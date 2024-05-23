@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 
 export default function QuotaRules() {
   const [rules, setRules] = useState([]);
@@ -80,24 +81,25 @@ export default function QuotaRules() {
   useEffect(() => {
     console.log(quotaRule);
   }, [quotaRule]);
+
   return (
     <div>
-      <div className="px-3 my-5">
+      <div className="px-3 my-5 ">
         <h3 className="text-xl font-semibold">QUOTA RULES</h3>
         <p className="text-md text-gray-600 my-3">
           These rules prevent non-admin users from creating a booking if it
           exceeds their usage allowance. Learn more
         </p>
         {/* {rules.map((rule) => ( */}
-        <div className="text-md  my-3 p-3 bg-gray-200 flex justify-between">
+        <div className="text-md my-3 rounded-1 p-3 bg-gray-200 flex justify-between">
           <div className="">
             <div className="space-y-2 my-1">
-              <label className="text-md my-2" for="exampleInputEmail1">
+              <label className="text-md my-2" htmlFor="exampleInputEmail1">
                 Limit
               </label>
-              <div className="grid lg:grid-cols-4   md:grid-cols-1">
+              <div className="grid lg:grid-cols-4 gap-2 md:grid-cols-1">
                 <select
-                  className="p-2 border rounded-0"
+                  className="p-2 border rounded-1"
                   style={{ maxWidth: "200px" }}
                   name="ruleType"
                   value={quotaRule && quotaRule.ruleType}
@@ -113,7 +115,7 @@ export default function QuotaRules() {
                 </select>
                 {quotaRule.ruleType !== "individuals" && (
                   <Select
-                    className="bg-white p-0 rounded-0 w-100 m-0 "
+                    className="bg-white p-0 rounded-1 w-100 m-0 "
                     style={{
                       maxHeight: "45px",
                       width: "100%",
@@ -194,12 +196,12 @@ export default function QuotaRules() {
               </div>
             </div>
             <div className="space-y-2 my-1">
-              <label className="text-md my-2" for="exampleInputEmail1">
+              <label className="text-md my-2" htmlFor="exampleInputEmail1">
                 to a per-user
               </label>
               <div>
                 <select
-                  className="p-2 rounded-0"
+                  className="p-2 rounded-1"
                   style={{ maxWidth: "165px" }}
                   name="type"
                   // value={newEvent && newEvent.start}
@@ -211,20 +213,20 @@ export default function QuotaRules() {
               </div>
             </div>
             <div className="space-y-2 my-1">
-              <label className="text-md my-2" for="exampleInputEmail1">
+              <label className="text-md my-2 gap-2" htmlFor="exampleInputEmail1">
                 of
               </label>
               {quotaRule.type === "time_usage" ? (
                 <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
                   <input
                     type="text"
-                    class="p-2 border rounded-0"
+                    className="p-2 border rounded-1"
                     placeholder="e.g Jones"
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
                   />
                   <select
-                    className="p-2 border rounded-0"
+                    className="p-2 border rounded-1"
                     style={{ maxWidth: "200px" }}
                     name="start"
                     // value={newEvent && newEvent.start}
@@ -234,7 +236,7 @@ export default function QuotaRules() {
                     <option value="12:30 AM">30m</option>
                   </select>
                   <select
-                    className="p-2 border rounded-0"
+                    className="p-2 border gap-2 rounded-1"
                     style={{ maxWidth: "200px" }}
                     name="start"
                     // value={newEvent && newEvent.start}
@@ -290,16 +292,16 @@ export default function QuotaRules() {
                   </Select>
                 </div>
               ) : (
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-0 ">
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-2 rounded=1 ">
                   <input
                     type="text"
-                    class="form-control p-2 rounded-0"
+                    className="form-control p-2 rounded-1"
                     placeholder="e.g 24"
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
                   />
                   <select
-                    className="p-2 rounded-0"
+                    className="p-2 rounded-1"
                     style={{ maxWidth: "200px" }}
                     name="start"
                     // value={newEvent && newEvent.start}
@@ -313,7 +315,7 @@ export default function QuotaRules() {
                     <option value="12:30 AM">at any given moment </option>
                   </select>
                   <Select
-                    className="bg-white p-0 rounded-0 w-100 m-0"
+                    className="bg-white p-0 rounded-1 w-100 m-0"
                     style={{ maxHeight: "45px", width: "100%" }}
                     labelId="select-multiple-checkbox-label"
                     id="select-multiple-checkbox"
@@ -358,12 +360,14 @@ export default function QuotaRules() {
             </div>
           </div>
           <div className="">
-            <button className="bg-white p-2 mx-1">del</button>
-            <button className="bg-white p-2 mx-1">save</button>
+            <button className="bg-green-400 hover:bg-green-700 text-white rounded-1 p-2 mx-1">
+              <Delete sx={{ color: "white" }} />
+            </button>
+            {/* <button className="bg-white p-2 mx-1">save</button> */}
           </div>
         </div>
         {/* ))} */}
-        <button className="bg-green-400 p-2 text-white">
+        <button className="bg-green-400 hover:bg-green-700 p-2 text-white rounded-1 ">
           Add a quota rule
         </button>
       </div>
