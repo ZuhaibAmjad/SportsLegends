@@ -37,6 +37,7 @@
     "styled-components": "^6.1.8",
     "uninstall": "^0.0.0",
     "universal-cookie": "^7.1.4",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
