@@ -11,6 +11,9 @@ import Availibilty from "./Availibilty";
 import QuotaRules from "./QuotaRules";
 import BufferTime from "./BufferTime";
 import AddSpaces from "../../Components/AddSpaces";
+import BookingWindows from "../../Components/BookingWindows";
+import ConditionsBooking from "../../Components/ConditionsBooking";
+
 
 export default function Setting() {
   const [Show, setShow] = useState('spaces');
@@ -112,9 +115,9 @@ export default function Setting() {
                 <p className="text-lg text-gray-600 p-2">RULES</p>
                 <button
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "condition" ? "bg-gray-300" : ""
+                    Show === "conditionsbooking" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => handleButtonClick('condition')}
+                  onClick={() => handleButtonClick('conditionsbooking')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
@@ -162,15 +165,15 @@ export default function Setting() {
                 </button>
                 <button
                   className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "window" ? "bg-gray-300" : ""
+                    Show === "bookingwindow" ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => handleButtonClick('window')}
+                  onClick={() => handleButtonClick('bookingwindow')}
                 >
                   <div className="">
                     <FontAwesomeIcon icon={faSquareRss} className="h-6" />
                   </div>
                   <div className="">
-                    <h3 className="text-blue-500  mb-1 text-start">
+                    <h3 className="text-blue-500 mb-1 text-start">
                       Booking window
                     </h3>
                     <p className="text-sm">
@@ -189,6 +192,9 @@ export default function Setting() {
               {Show === 'buffer' && <BufferTime />}
               {Show === 'quota' && <QuotaRules />}
               {Show === 'spaces' && <AddSpaces />}
+              {Show === 'bookingwindow' && <BookingWindows />}
+              {Show === 'conditionsbooking' && <ConditionsBooking />}
+
             </div>
           </div>
         </div>
@@ -196,3 +202,4 @@ export default function Setting() {
     </>
   );
 }
+
