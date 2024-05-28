@@ -13,6 +13,7 @@ import BufferTime from "./BufferTime";
 import AddSpaces from "../../Components/AddSpaces";
 import BookingWindows from "../../Components/BookingWindows";
 import ConditionsBooking from "../../Components/ConditionsBooking";
+import AddPrices from "../../Components/AddPrices";
 
 
 export default function Setting() {
@@ -63,9 +64,8 @@ export default function Setting() {
                 </div>
                 <p className="text-lg text-gray-600 p-2">YOUR VENUE</p>
                 <button
-                  className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "spaces" ? "bg-gray-300" : ""
-                  }`}
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "spaces" ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleButtonClick('spaces')}
                 >
                   <div className="">
@@ -79,9 +79,8 @@ export default function Setting() {
                   </div>
                 </button>
                 <button
-                  className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "availibility" ? "bg-gray-300" : ""
-                  }`}
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "availibility" ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleButtonClick('availibility')}
                 >
                   <div className="">
@@ -95,9 +94,8 @@ export default function Setting() {
                   </div>
                 </button>
                 <button
-                  className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "maps" ? "bg-gray-300" : ""
-                  }`}
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "maps" ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleButtonClick('maps')}
                 >
                   <div className="">
@@ -114,9 +112,8 @@ export default function Setting() {
                 </button>
                 <p className="text-lg text-gray-600 p-2">RULES</p>
                 <button
-                  className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "conditionsbooking" ? "bg-gray-300" : ""
-                  }`}
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "conditionsbooking" ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleButtonClick('conditionsbooking')}
                 >
                   <div className="">
@@ -129,10 +126,27 @@ export default function Setting() {
                     <p className="text-sm">Rules on a per booking basis</p>
                   </div>
                 </button>
+
                 <button
-                  className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "quota" ? "bg-gray-300" : ""
-                  }`}
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "addprices" ? "bg-gray-300" : ""
+                    }`}
+                  onClick={() => handleButtonClick('addprices')}
+                >
+                  <div className="">
+                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                  </div>
+                  <div className="">
+                    <h3 className="text-blue-500  mb-1 text-start">
+                      Pricing
+                    </h3>
+                    <p className="text-sm">Your pricing structure for bookings</p>
+                  </div>
+                </button>
+
+
+                <button
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "quota" ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleButtonClick('quota')}
                 >
                   <div className="">
@@ -146,9 +160,8 @@ export default function Setting() {
                   </div>
                 </button>
                 <button
-                  className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "buffer" ? "bg-gray-300" : ""
-                  }`}
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "buffer" ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleButtonClick('buffer')}
                 >
                   <div className="">
@@ -164,9 +177,8 @@ export default function Setting() {
                   </div>
                 </button>
                 <button
-                  className={`flex p-2 space-x-3 ml-4  w-100  ${
-                    Show === "bookingwindow" ? "bg-gray-300" : ""
-                  }`}
+                  className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "bookingwindow" ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleButtonClick('bookingwindow')}
                 >
                   <div className="">
@@ -194,6 +206,7 @@ export default function Setting() {
               {Show === 'spaces' && <AddSpaces />}
               {Show === 'bookingwindow' && <BookingWindows />}
               {Show === 'conditionsbooking' && <ConditionsBooking />}
+              {Show === 'addprices' && <AddPrices />}
 
             </div>
           </div>

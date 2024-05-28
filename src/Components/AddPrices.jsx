@@ -4,13 +4,15 @@ import { styled } from "@mui/material/styles";
 import { Cancel, AddCircleOutline } from "@mui/icons-material";
 import {
   Checkbox,
+  Divider,
+  FormControlLabel,
   MenuItem,
   Select,
   ListItemText,
 } from "@mui/material";
 
-export default function ConditionsBooking() {
-  const [conditionsBooking, setConditionsBooking] = useState([]);
+export default function Pricing() {
+  const [pricingRules, setPricingRules] = useState([]);
 
   const resourceMap = [
     {
@@ -22,7 +24,7 @@ export default function ConditionsBooking() {
 
   const handleAddRule = () => {
     const newRule = {
-      resourceId: conditionsBooking.length + 1,
+      resourceId: pricingRules.length + 1,
       resources: [],
       from: "all spaces",
       to: "all time",
@@ -30,37 +32,37 @@ export default function ConditionsBooking() {
       interval: "",
       operator: "",
     };
-    setConditionsBooking([...conditionsBooking, newRule]);
+    setPricingRules([...pricingRules, newRule]);
   };
 
   const handleSelectChange = (e, ruleIndex) => {
-    const updatedConditions = [...conditionsBooking];
-    updatedConditions[ruleIndex].resources = e.target.value;
-    setConditionsBooking(updatedConditions);
+    const updatedRules = [...pricingRules];
+    updatedRules[ruleIndex].resources = e.target.value;
+    setPricingRules(updatedRules);
   };
 
   const handleTimeChange = (e, ruleIndex, type) => {
-    const updatedConditions = [...conditionsBooking];
-    updatedConditions[ruleIndex][type] = e.target.value;
-    setConditionsBooking(updatedConditions);
+    const updatedRules = [...pricingRules];
+    updatedRules[ruleIndex][type] = e.target.value;
+    setPricingRules(updatedRules);
   };
 
   const handleDurationChange = (e, ruleIndex) => {
-    const updatedConditions = [...conditionsBooking];
-    updatedConditions[ruleIndex].duration = e.target.value;
-    setConditionsBooking(updatedConditions);
+    const updatedRules = [...pricingRules];
+    updatedRules[ruleIndex].duration = e.target.value;
+    setPricingRules(updatedRules);
   };
 
   const handleIntervalChange = (e, ruleIndex) => {
-    const updatedConditions = [...conditionsBooking];
-    updatedConditions[ruleIndex].interval = e.target.value;
-    setConditionsBooking(updatedConditions);
+    const updatedRules = [...pricingRules];
+    updatedRules[ruleIndex].interval = e.target.value;
+    setPricingRules(updatedRules);
   };
 
   const handleOperatorChange = (e, ruleIndex) => {
-    const updatedConditions = [...conditionsBooking];
-    updatedConditions[ruleIndex].operator = e.target.value;
-    setConditionsBooking(updatedConditions);
+    const updatedRules = [...pricingRules];
+    updatedRules[ruleIndex].operator = e.target.value;
+    setPricingRules(updatedRules);
   };
 
   const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -68,9 +70,9 @@ export default function ConditionsBooking() {
       marginTop: theme.spacing(3),
     },
     "& .MuiInputBase-input": {
-      borderRadius: "4px",
+      borderRadius: "0px",
       fontSize: 12,
-      padding: "8px",
+      padding: "0px",
       transition: theme.transitions.create(["border-color", "box-shadow"]),
       fontFamily: [
         "-apple-system",
@@ -145,11 +147,10 @@ export default function ConditionsBooking() {
   return (
     <div>
       <div className="px-3 my-5">
-        <h3 className="text-xl font-semibold">BOOKING CONDITIONS</h3>
+        <h3 className="text-xl font-semibold">PRICING RULES</h3>
         <p className="text-md text-gray-600 my-3">
-          Use booking conditions to further limit how non-admin users make
-          individual bookings. Enforce duration constraints, specify strict
-          booking blocks, or completely deny bookings at certain times.{" "}
+          Use pricing rules to define the cost of using resources. Specify
+          different prices based on various criteria.{" "}
           <a
             href=""
             target="_blank"
@@ -159,9 +160,9 @@ export default function ConditionsBooking() {
             Learn more
           </a>
         </p>
-        {conditionsBooking.map((rule, index) => (
+        {pricingRules.map((rule, index) => (
           <div key={index} className="text-md my-3 p-3 bg-gray-200 rounded-md">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between">
               <div>
                 <Select
                   style={{
@@ -211,7 +212,7 @@ export default function ConditionsBooking() {
                 </Select>
               </div>
               <div className="flex flex-row mx-2 text-center items-center">
-                <label className="mr-2"> From:</label>
+                <label className="mr-2">From:</label>
                 <select
                   value={rule.from}
                   onChange={(e) => handleTimeChange(e, index, "from")}
@@ -241,9 +242,7 @@ export default function ConditionsBooking() {
               <button
                 className="bg-white text-white rounded-1 p-2 mx-1"
                 onClick={() =>
-                  setConditionsBooking(
-                    conditionsBooking.filter((_, i) => i !== index)
-                  )
+                  setPricingRules(pricingRules.filter((_, i) => i !== index))
                 }
               >
                 <Cancel sx={{ color: "red" }} />
