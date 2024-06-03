@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Alert, Slide, Snackbar, } from "@mui/material";
+import { Alert, Slide, Snackbar } from "@mui/material";
 import axios from "axios";
-import { QueueIcon} from "@mui/icons-material"
+import { AddCircleOutline } from "@mui/icons-material";
 
 export default function AddSpaces() {
   const [open, setOpen] = useState(false);
@@ -12,36 +12,19 @@ export default function AddSpaces() {
   const [deleteValue, setDeleteValue] = useState("");
   const [deleteOption, setDeleteOption] = useState(false);
   const [succesAlert, setSuccesAlert] = useState(false);
-
-  // const spaces = [
-  //   { resourceId: 1, resourcePrice: 3000, name: "Padel Court 1" },
-  //   { resourceId: 2, resourcePrice: 3500, name: "Padel Court 2" },
-  //   { resourceId: 3, resourcePrice: 3000, name: "Padel Court 3" },
-  //   { resourceId: 4, resourcePrice: 3000, name: "Padel Court 4" },
-  //   { resourceId: 5, resourcePrice: 3000, name: "Padel Court 5" },
-  //   {
-  //     resourceId: 6,
-  //     resourcePrice: 3000,
-  //     name: "Cricket ( 9-aside )",
-  //   },
-  //   {
-  //     resourceId: 7,
-  //     resourcePrice: 2000,
-  //     name: "Cricket ( 7-aside )",
-  //   },
-  // ];
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const [spaces, setSpaces] = useState([]);
   const [newSpace, setNewSpace] = useState("");
   const [selectedSpace, setSelectedSpace] = useState("");
-  const [errorAlert, setErrorAlert] = useState(false);
-  const [msg, setMsg] = useState("");
 
   const closeDailog = () => {
     setNewSpace("");
     setOpen(false);
     setAddSpace(false);
     setErrorAlert(false);
+    setSuccesAlert(false);
   };
 
   const verify = (e) => {
@@ -55,12 +38,8 @@ export default function AddSpaces() {
   };
 
   const Add = async (e) => {
-    console.log("Clicked");
     e.preventDefault();
-    let data;
     if (newSpace.trim() !== "") {
-      console.log("Enter");
-      // setLoading(true);
       try {
         const params = new URLSearchParams();
         params.append("name", newSpace);
@@ -75,41 +54,20 @@ export default function AddSpaces() {
             withCredentials: true,
           }
         );
-        console.log(response);
-        data = response.data;
-        console.log(data);
         if (response.status === 201) {
           closeDailog();
-          setMsg("New Space is Added Succesfully");
+          setMsg("New Space is Added Successfully");
           setSuccesAlert(true);
+          getSpaces();
         }
       } catch (error) {
-        if (error.response.status === 401) {
-          // setErrMsg(
-          //   "Sorry, your login credentials are not correct. Please double-check your email and password. You can use the login-reset feature if you have forgotten your password."
-          // );
-          // setLoading(false);
-          // setError(true);
-          console.log(error);
+        if (error.response && error.response.status === 401) {
           return;
         }
-        if (error.response.status === 500) {
-          setMsg("Please Check your Internet Connection and Try Again");
-          setErrorAlert(true);
-          console.log(error);
-          return;
-        } else {
-          setMsg("Please Check your Internet Connection and Try Again");
-          setErrorAlert(true);
-          console.log(error);
-          return;
-        }
+        setMsg("Please Check your Internet Connection and Try Again");
+        setErrorAlert(true);
       }
     } else {
-      // setErrMsg("Please Enter Name to Continue");
-      // setLoading(false);
-      // setError(true);
-      console.log("error");
       return;
     }
   };
@@ -130,8 +88,9 @@ export default function AddSpaces() {
           (space) => space._id !== selectedSpace._id
         );
         setSpaces(updatedSpaces);
-        setMsg(" Space is Deleted Succesfully");
+        setMsg("Space is Deleted Successfully");
         setSuccesAlert(true);
+        setSelectedSpace(spaces[0]);
       } else if (response.status === 404) {
         setMsg("Space Not Found");
         setErrorAlert(true);
@@ -159,26 +118,30 @@ export default function AddSpaces() {
           withCredentials: true,
         }
       );
-      console.log(response);
-      if (response.status === 201) {
+      if (response.status === 200) {
         setSpaces(response.data);
-        setSelectedSpace(spaces[0]);
+        setSelectedSpace(response.data[0]);
       }
     } catch (error) {
-      alert("An error occurred while fetching spaces");
+      setMsg("An error occurred while fetching spaces");
+      setErrorAlert(true);
     }
   };
 
-  const containerRef = React.useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    console.log(selectedSpace);
-  }, [selectedSpace]);
+    if (errorAlert || succesAlert) {
+      const timer = setTimeout(() => {
+        closeDailog();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorAlert, succesAlert]);
 
   useEffect(() => {
     getSpaces();
-    console.log(newSpace);
-  }, [newSpace]);
+  }, []);
 
   return (
     <div>
@@ -194,7 +157,7 @@ export default function AddSpaces() {
       </Snackbar>
       <Snackbar
         open={succesAlert}
-        autoHideDuration={2000}
+        autoHideDuration={3000}
         onClose={closeDailog}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
@@ -233,10 +196,10 @@ export default function AddSpaces() {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden  text-left shadow-xl transition-all sm:my-8 max-w-5xl">
+                <Dialog.Panel className="relative transform overflow-hidden text-left shadow-xl transition-all sm:my-8 max-w-5xl">
                   <div className="">
-                    <div className=" bg-white w-full">
-                      <div className="w-full ">
+                    <div className="bg-white w-full">
+                      <div className="w-full">
                         <div className="">
                           <div className="border">
                             <h1 className="bg-blue-500 text-white w-100 px-4 py-3 fs-4 text-semibold">
@@ -253,6 +216,7 @@ export default function AddSpaces() {
           </div>
         </Dialog>
       </Transition.Root>
+
       <Transition.Root show={AddSpace} as={Fragment}>
         <Dialog
           as="div"
@@ -288,7 +252,7 @@ export default function AddSpaces() {
                 <h1 className="bg-blue-500 text-white w-100 px-4 py-3 fs-4 text-semibold">
                   ADD SPACES
                 </h1>
-                <div className="grid lg:grid-cols-1 md:grid-cols-1  mt-2 px-5 ">
+                <div className="grid lg:grid-cols-1 md:grid-cols-1 mt-2 px-5">
                   <p>SPACE NAMES (ONE PER LINE)</p>
                   <textarea
                     type="text"
@@ -300,9 +264,10 @@ export default function AddSpaces() {
                   <div className="flex gap-2">
                     <button
                       onClick={Add}
-                      className="px-3 py-2 bg-green-400 hover:bg-green-700 text-white text-lg rounded-1 "
+                      className="px-3 py-2 bg-green-400 hover:bg-green-700 text-white text-lg rounded-1"
                     >
-                    Add Space
+                      <AddCircleOutline className="mr-2" />
+                      Add Space
                     </button>
                     <button
                       className="px-3 py-2 border-gray-300 hover:bg-slate-100 rounded-1"
@@ -324,7 +289,11 @@ export default function AddSpaces() {
           Your spaces are your core bookable resources. Select a space to edit
           it, or reposition them with drag and drop.
         </p>
-        <button className="px-3 py-2 bg-green-400 hover:bg-green-700 text-white text-lg rounded-1 " onClick={() => setAddSpace(true)}>
+        <button
+          className="px-3 py-2 bg-green-400 hover:bg-green-700 text-white text-lg rounded-1"
+          onClick={() => setAddSpace(true)}
+        >
+          <AddCircleOutline className="mr-2" />
           Add Spaces
         </button>
       </div>
@@ -333,10 +302,12 @@ export default function AddSpaces() {
           <div className="border p-3 rounded-1">
             {spaces.map((space) => (
               <button
-                className={` ${selectedSpace?._id === space._id
+                key={space._id}
+                className={`${
+                  selectedSpace?._id === space._id
                     ? "bg-gray-300 rounded-1"
                     : "hover:bg-gray-200 rounded-1"
-                  } w-100 p-2 text-start mb-1`}
+                } w-100 p-2 text-start mb-1`}
                 onClick={() => setSelectedSpace(space)}
               >
                 {space.name}
@@ -345,66 +316,73 @@ export default function AddSpaces() {
           </div>
         </div>
         <div className="w-full md:w-2/3 md:flex-grow bg-white border border-gray-300 rounded-1">
-          <div className="flex grid lg:grid-cols-2 md:grid-cols-1 mt-2 p-3 gap-x-3 ">
+          <div className="flex grid lg:grid-cols-2 md:grid-cols-1 mt-2 p-3 gap-x-3">
             <div className="space-y-2">
-              <label className="text-sm" for="exampleInputEmail1">
+              <label className="text-sm" htmlFor="exampleInputEmail1">
                 NAME
               </label>
               <div>
                 <input
                   type="text"
-                  class="form-control rounded-1"
+                  className="form-control rounded-1"
                   placeholder="Name"
-                  value={selectedSpace && selectedSpace.name}
+                  value={selectedSpace ? selectedSpace.name : ""}
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
+                  readOnly
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-sm" for="exampleInputEmail1">
+              <label className="text-sm" htmlFor="exampleInputEmail1">
                 VISIBILITY
               </label>
               <div>
                 <input
                   type="radio"
-                  class="mr-2"
+                  className="mr-2"
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
+                  readOnly
                 />
                 All users can see the space
               </div>
               <div>
                 <input
                   type="radio"
-                  class="mr-2 h-full"
+                  className="mr-2 h-full"
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
+                  readOnly
                 />
                 Only users with any of these tags can see the space:
               </div>
             </div>
           </div>
-          <div className="p-3 ">
-            <label className="text-sm" for="exampleInputEmail1">
+          <div className="p-3">
+            <label className="text-sm" htmlFor="exampleInputEmail1">
               Description
             </label>
             <div>
-              <textarea className="w-full border p-2 rounded-1" rows="4" cols="50" />
+              <textarea
+                className="w-full border p-2 rounded-1"
+                rows="4"
+                cols="50"
+                readOnly
+              />
             </div>
           </div>
-          <div className="p-3 ">
-            <label className="text-sm" for="exampleInputEmail1">
+          <div className="p-3">
+            <label className="text-sm" htmlFor="exampleInputEmail1">
               Delete Space
             </label>
             <div>
               <button
-                className="p-2 border my-2 bg-green-400 hover:bg-green-700 hover:text-white rounded-1 "
+                className="p-2 border my-2 bg-green-400 hover:bg-green-700 hover:text-white rounded-1"
                 onClick={() => setDeleteOption(!deleteOption)}
               >
-                {" "}
                 {deleteOption ? "Hide delete option" : "Show delete option"}
-              </button>{" "}
+              </button>
             </div>
             {deleteOption ? (
               <>
@@ -418,7 +396,7 @@ export default function AddSpaces() {
                     Careful! This is an irreversible action. If you delete this
                     space, all bookings for it will likewise be deleted!
                     Consider exporting your data from the scheduler list mode
-                    first. To continue, type Permanently delete Test 1 with
+                    first. To continue, type Permanently delete {selectedSpace.name} with
                     bookings below.
                   </Alert>
                 </Slide>
@@ -450,11 +428,12 @@ export default function AddSpaces() {
                 )}
 
                 <button
-                  className={`p-2 border mt-4 hover:bg-green-400 rounded-1 ${deleteValue ===
-                      `Permanently delete ${selectedSpace.name} with bookings`
-                      ? "hover:bg-gray-300"
-                      : ""
-                    }`}
+                  className={`p-2 border mt-4 rounded-1 ${
+                    deleteValue ===
+                    `Permanently delete ${selectedSpace.name} with bookings`
+                      ? "bg-red-500 text-white hover:bg-red-700"
+                      : "bg-gray-300"
+                  }`}
                   disabled={
                     deleteValue !==
                     `Permanently delete ${selectedSpace.name} with bookings`

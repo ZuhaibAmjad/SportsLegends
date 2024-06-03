@@ -254,18 +254,18 @@ export default function AdminResource() {
           </div>
         )} */}
             </StyledMenu>
-              <input
-                type="text"
-                name="email"
-                size="small"
-                // onChange={getUserdata}
-                required
-                class="form-control rounded-0"
-                placeholder="Search"
-                aria-label="Recipient's username"
-                aria-describedby="basic-addon2"
-              />
-              <button className="border p-1 m-1">Activity </button>
+            <input
+              type="text"
+              name="email"
+              size="small"
+              // onChange={getUserdata}
+              required
+              class="form-control rounded-0"
+              placeholder="Search"
+              aria-label="Recipient's username"
+              aria-describedby="basic-addon2"
+            />
+            <button className="border p-1 m-1">Activity </button>
           </div>
           <div className="flex">
             <p className="bg-green-100 border p-1 m-1 rounded-1">20 match</p>
@@ -337,6 +337,14 @@ export default function AdminResource() {
   // }
 
   const CustomToolbar = ({ label, onNavigate, onView }) => {
+    const [activeTab, setActiveTab] = useState("day");
+    const handleTabClick = (view) => {
+      setActiveTab(view); 
+      onView(view); 
+    };
+    const handleNavigate = (direction) => {
+      onNavigate(direction, activeTab);
+    };
     return (
       <>
         {showHeader ? (
@@ -384,50 +392,56 @@ export default function AdminResource() {
           </div>
         ) : (
           <>
-            <div className="flex p-3 bg-gray-100">
+            <div className="flex gap-1 p-3 bg-gray-100">
               <div className="">
                 <button
-                  onClick={() => onView("day")}
-                  className="rounded-l-sm bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick("day")}
+                  className={`rounded-l-sm py-2 px-3 text-md font-semibold ${activeTab === "day" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   DAY
                 </button>
+
                 <button
-                  onClick={() => onView("month")}
-                  className="bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick("month")}
+                  className={`py-2 px-3 text-md font-semibold ${activeTab === "month" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   MONTH
                 </button>
                 <button
-                  onClick={() => onView("day")}
-                  className="bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick("grid")}
+                  className={`py-2 px-3 text-md font-semibold ${activeTab === "grid" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   GRID
                 </button>
                 <button
-                  onClick={() => onView("week")}
-                  className="rounded-r-sm bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick("week")}
+                  className={`rounded-r-sm py-2 px-3 text-md font-semibold ${activeTab === "week" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   LIST
                 </button>
               </div>
               <button
-                onClick={() => onNavigate("PREV")}
+                onClick={() => handleNavigate("PREV")}
                 className="rounded-l-sm ml-2 bg-gray-300 hover:bg-gray-200"
               >
                 <ArrowBackIosIcon className="h-8 p-1" />
               </button>
               <button
-                onClick={() => onNavigate("NEXT")}
+                onClick={() => handleNavigate("NEXT")}
                 className="rounded-r-sm bg-gray-300 hover:bg-gray-200"
               >
-                <ArrowForwardIosIcon className="h-8 p-1" />
+                <ArrowForwardIosIcon className="h-8 p-1" /> 
               </button>
               {/* <StaticDatePicker defaultValue={moment('2024-04-17')} /> */}
-              <span>{label}</span>
+               <span>  {label} </span>
             </div>
           </>
-        )}
+        )
+        }
       </>
     );
   };
@@ -1029,31 +1043,28 @@ export default function AdminResource() {
                             <div className="grid lg:grid-cols-1 md:grid-cols-1  mt-2 px-5 py-3 ">
                               <div className="lg:grid-cols-3 md:grid-cols-3 sm:grid-col-1 my-3 space-x-3">
                                 <button
-                                  className={`border  ${
-                                    currentPage === "user"
-                                      ? "bg-blue-500 text-white"
-                                      : "hover:bg-gray-100"
-                                  } p-2`}
+                                  className={`border  ${currentPage === "user"
+                                    ? "bg-blue-500 text-white"
+                                    : "hover:bg-gray-100"
+                                    } p-2`}
                                   onClick={() => PageChange("user")}
                                 >
                                   User Booking
                                 </button>
                                 <button
-                                  className={`border  ${
-                                    currentPage === "internal"
-                                      ? "bg-blue-500 text-white"
-                                      : "hover:bg-gray-100"
-                                  } p-2`}
+                                  className={`border  ${currentPage === "internal"
+                                    ? "bg-blue-500 text-white"
+                                    : "hover:bg-gray-100"
+                                    } p-2`}
                                   onClick={() => PageChange("internal")}
                                 >
                                   Internal Use
                                 </button>
                                 <button
-                                  className={`border  ${
-                                    currentPage === "unavailable"
-                                      ? "bg-blue-500 text-white"
-                                      : "hover:bg-gray-100"
-                                  } p-2`}
+                                  className={`border  ${currentPage === "unavailable"
+                                    ? "bg-blue-500 text-white"
+                                    : "hover:bg-gray-100"
+                                    } p-2`}
                                   onClick={() => PageChange("unavailable")}
                                 >
                                   Unavailable
@@ -1444,7 +1455,7 @@ export default function AdminResource() {
           month: true, // Enable month view
         }}
         messages={{}}
-        // slotPropGetter={slotPropGetter}
+      // slotPropGetter={slotPropGetter}
       />
     </Fragment>
   );

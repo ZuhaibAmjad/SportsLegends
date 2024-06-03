@@ -7,7 +7,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { Delete } from "@mui/icons-material";
+import { Delete, AddCircleOutline } from "@mui/icons-material";
 
 export default function Availibilty() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -133,6 +133,7 @@ export default function Availibilty() {
           className="bg-green-400 hover:bg-green-700 text-white rounded-1 p-2 mx-1"
           onClick={handleAddRule}
         >
+          <AddCircleOutline className="mr-2" />
           Add a Buffer Rule
         </button>
       </div>

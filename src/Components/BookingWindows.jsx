@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, MenuItem, Select } from "@mui/material";
-import { CancelOutlined } from "@mui/icons-material";
+import { CancelOutlined, AddCircleOutline } from "@mui/icons-material";
 import { styled } from '@mui/system';
 
 const CancelIcon = styled(CancelOutlined)(({ theme }) => ({
@@ -294,6 +294,7 @@ export default function BookingWindow() {
           </div>
         </div>
         <button className="bg-green-400 hover:bg-green-700 p-2 text-white rounded-1">
+        <AddCircleOutline className="mr-2" />
           Add a booking window
         </button>
       </div>

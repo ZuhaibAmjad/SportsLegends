@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import InputBase from "@mui/material/InputBase";
 import { styled } from "@mui/material/styles";
-import { Cancel, AddCircleOutline } from "@mui/icons-material";
+import { Cancel, AddCircleOutline, CheckCircle } from "@mui/icons-material";
 import {
   Checkbox,
   MenuItem,
   Select,
   ListItemText,
+  Button,
 } from "@mui/material";
 
 export default function ConditionsBooking() {
   const [conditionsBooking, setConditionsBooking] = useState([]);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   const resourceMap = [
     {
@@ -61,6 +63,15 @@ export default function ConditionsBooking() {
     const updatedConditions = [...conditionsBooking];
     updatedConditions[ruleIndex].operator = e.target.value;
     setConditionsBooking(updatedConditions);
+  };
+
+  const handleBookingClick = (rule) => {
+    setSelectedBooking(rule);
+  };
+
+  const handleCloseBooking = () => {
+    setSelectedBooking(null);
+    // Add logic to clear selected data if needed
   };
 
   const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -287,6 +298,13 @@ export default function ConditionsBooking() {
                 ))}
               </select>
             </div>
+            {/* <button
+              className="p-2 border my-2 bg-green-400 hover:bg-green-700 hover:text-white rounded-1 flex items-center"
+              onClick={() => handleBookingClick(rule)}
+            >
+              <AddCircleOutline className="mr-2" />
+              Book
+            </button> */}
           </div>
         ))}
         <button
@@ -297,6 +315,27 @@ export default function ConditionsBooking() {
           Add Rule
         </button>
       </div>
+      {/* {selectedBooking && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-5 rounded-md">
+            <h3 className="text-lg font-semibold">Booking Details</h3>
+            <p>Resource ID: {selectedBooking.resourceId}</p>
+            <p>From: {selectedBooking.from}</p>
+            <p>To: {selectedBooking.to}</p>
+           <div className="gap-2">
+           <button
+              className="mt-3 bg-red-500 text-white p-2 rounded-1"
+              onClick={handleCloseBooking}
+            >
+              Close
+            </button>
+            <button className="mt-3 bg-green-500 text-white p-2 rounded-1">
+              Confirm Booking
+            </button>
+           </div>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 }
