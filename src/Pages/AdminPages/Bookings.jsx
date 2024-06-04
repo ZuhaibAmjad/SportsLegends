@@ -26,10 +26,15 @@ import moment from "moment";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faCalendarPlus,
   faClock,
+  faCircleXmark,
+  faBan,
+  faHouseUser,
   faUser,
+
 } from "@fortawesome/free-solid-svg-icons";
 import UnavailableEvent from "../../Components/UnavailableEvent";
 import UserBooking from "../../Components/UserBooking";
@@ -339,8 +344,8 @@ export default function AdminResource() {
   const CustomToolbar = ({ label, onNavigate, onView }) => {
     const [activeTab, setActiveTab] = useState("day");
     const handleTabClick = (view) => {
-      setActiveTab(view); 
-      onView(view); 
+      setActiveTab(view);
+      onView(view);
     };
     const handleNavigate = (direction) => {
       onNavigate(direction, activeTab);
@@ -434,12 +439,13 @@ export default function AdminResource() {
                 onClick={() => handleNavigate("NEXT")}
                 className="rounded-r-sm bg-gray-300 hover:bg-gray-200"
               >
-                <ArrowForwardIosIcon className="h-8 p-1" /> 
+                <ArrowForwardIosIcon className="h-8 p-1" />
               </button>
               {/* <StaticDatePicker defaultValue={moment('2024-04-17')} /> */}
-               <span>  {label} </span>
+              <span>  {label} </span>
             </div>
           </>
+          
         )
         }
       </>
@@ -991,6 +997,7 @@ export default function AdminResource() {
   //   }),
   //   []
   // )
+  
   return (
     <Fragment>
       <style>
@@ -1037,39 +1044,55 @@ export default function AdminResource() {
                       <div className="w-full ">
                         <div className="">
                           <div className="border">
-                            <h1 className="bg-blue-500 text-white w-100 px-4 py-3 fs-4 text-semibold">
-                              NEW BOOKING
-                            </h1>
+
+                            <div className="flex justify-between items-center bg-blue-500 text-white px-4 py-3">
+                              <div className="flex items-center">
+                                <FontAwesomeIcon
+                                  className="h-5 mr-2 bg-blue-500 p-2 text-white rounded-5"
+                                  icon={faCalendarPlus}
+                                />
+                                <h1 className="fs-4 text-semibold">
+                                  NEW BOOKING
+                                </h1>
+                              </div>
+                              <button
+                                onClick={closeDailog}
+                                className="rounded-full p-2 text-sm hover:bg-blue-700 flex items-center bg-blue-500 text-white"
+                                ref={cancelButtonRef}
+                              >
+                                <FontAwesomeIcon icon={faCircleXmark} className="h-6" />
+                              </button>
+                            </div>
+
+
                             <div className="grid lg:grid-cols-1 md:grid-cols-1  mt-2 px-5 py-3 ">
                               <div className="lg:grid-cols-3 md:grid-cols-3 sm:grid-col-1 my-3 space-x-3">
                                 <button
-                                  className={`border  ${currentPage === "user"
-                                    ? "bg-blue-500 text-white"
-                                    : "hover:bg-gray-100"
-                                    } p-2`}
+                                  className={`border px-3 py-2 rounded-1 ${currentPage === "user" ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                                    }`}
                                   onClick={() => PageChange("user")}
                                 >
-                                  User Booking
+                                  <FontAwesomeIcon icon={faUser} />
+                                  <span className="ml-2">User Booking</span>
                                 </button>
                                 <button
-                                  className={`border  ${currentPage === "internal"
-                                    ? "bg-blue-500 text-white"
-                                    : "hover:bg-gray-100"
-                                    } p-2`}
+                                  className={`border px-3 py-2 rounded-1 ${currentPage === "internal" ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                                    }`}
                                   onClick={() => PageChange("internal")}
                                 >
-                                  Internal Use
+                                  <FontAwesomeIcon icon={faHouseUser} />
+                                  <span className="ml-2">Internal Use</span>
                                 </button>
                                 <button
-                                  className={`border  ${currentPage === "unavailable"
-                                    ? "bg-blue-500 text-white"
-                                    : "hover:bg-gray-100"
-                                    } p-2`}
+                                  className={`border px-3 py-2 rounded-1 ${currentPage === "unavailable" ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                                    }`}
                                   onClick={() => PageChange("unavailable")}
                                 >
-                                  Unavailable
+                                  <FontAwesomeIcon icon={faBan} />
+                                  <span className="ml-2">Unavailable</span>
                                 </button>
                               </div>
+
                               <div className="my-2 mt-4">
                                 <label
                                   className="text-sm"
@@ -1089,6 +1112,8 @@ export default function AdminResource() {
                                         placeholder="e.g Sally"
                                         aria-label="Recipient's username"
                                         aria-describedby="basic-addon2"
+                                        required
+
                                       />
                                     </div>
                                   </div>
@@ -1100,12 +1125,15 @@ export default function AdminResource() {
                                         value={newEvent && newEvent.start}
                                         onChange={getEventData}
                                       >
+
                                         <option
                                           value={newEvent && newEvent.start}
+
                                         >
-                                          {newEvent && newEvent.start}
+                                          From
+                                          <span> {newEvent && newEvent.start}</span>
                                         </option>
-                                        <option value="12:00 AM">
+                                        <option value="12:00 ">
                                           12:00 AM
                                         </option>
                                         <option value="12:30 AM">
@@ -1188,8 +1216,8 @@ export default function AdminResource() {
                                       >
                                         <option
                                           value={newEvent && newEvent.end}
-                                        >
-                                          {newEvent && newEvent.end}
+                                        > To
+                                          <span> {newEvent && newEvent.end}</span>
                                         </option>
                                         <option value="12:00 AM">
                                           12:00 AM
@@ -1267,16 +1295,54 @@ export default function AdminResource() {
                                     </div>
                                   </div>
                                 </div>
+
+                                <label
+                                  className="text-sm"
+                                  for="Days"
+                                >
+                                  REPEAT
+                                </label>
+                                <div className="my-2 grid lg:grid-cols-2 md:grid-cols-2 space-x-2 my-3">
+                                  <div className="">
+                                    <select
+                                      className="form-control rounded-0"
+                                      value={newEvent && newEvent}
+                                      onChange={getEventData}
+                                      name="end"
+                                    >
+                                      <option
+                                        value={newEvent && newEvent.none}
+                                      > None
+                                        <span> {newEvent && newEvent.none}</span>
+                                      </option>
+                                      <option value="None">
+                                        None
+                                      </option>
+                                      <option value="Daily">
+                                        Daily
+                                      </option>
+                                      <option value="Weekly">Weekly</option>
+                                      <option value="Monthly">Monthly</option>
+                                      <option value="Yearly">Yearly</option>
+
+                                    </select>
+                                  </div>
+                                </div>
+
                               </div>
+
                               <div className="mb-2">
                                 <FormControl sx={{ width: "100%" }}>
                                   <label
                                     className="text-sm my-2  "
                                     for="exampleInputEmail1"
                                   >
+
                                     SPACES
                                   </label>
+                                  {/* <FontAwesomeIcon icon={faGrip} className="h-6" /> */}
                                   <Select
+
                                     labelId="select-multiple-checkbox-label"
                                     id="select-multiple-checkbox"
                                     multiple
