@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Month() {
   return (
-    <div>
+    <div className=''>
       <table className="border w-full my-2">
         <tr>
           <td className="border text-sm p-1 ">

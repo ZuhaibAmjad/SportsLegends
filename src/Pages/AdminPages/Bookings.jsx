@@ -34,6 +34,7 @@ import {
   faBan,
   faHouseUser,
   faUser,
+  faPlus,
 
 } from "@fortawesome/free-solid-svg-icons";
 import UnavailableEvent from "../../Components/UnavailableEvent";
@@ -48,52 +49,6 @@ import { StaticDatePicker } from "@mui/x-date-pickers";
 import { styled, alpha } from "@mui/material/styles";
 
 const localizer = momentLocalizer(moment);
-
-// const resourceMap = [
-//   {
-//     resourceId: 1,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 1",
-//   },
-//   {
-//     resourceId: 2,
-//     resourcePrice: 3500,
-//     resourceTitle: "Padel Court 2",
-//   },
-//   {
-//     resourceId: 3,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 3",
-//   },
-//   {
-//     resourceId: 4,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 4",
-//   },
-//   {
-//     resourceId: 5,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 5",
-//   },
-//   {
-//     resourceId: 6,
-//     resourcePrice: 3000,
-//     resourceTitle: "Cricket ( 9-aside )",
-//   },
-//   {
-//     resourceId: 7,
-//     resourcePrice: 2000,
-//     resourceTitle: "Cricket ( 7-aside )",
-//   },
-//   {
-//     resourceId: 8,
-//     resourcePrice: 4000,
-//     resourceTitle: "Super Sunday ( 7-aside )",
-//     start: new Date().setHours(11, 0, 0), // 12pm
-//     end: new Date().setHours(23, 0, 0),
-//   },
-// ];
-
 const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
@@ -176,7 +131,8 @@ export default function AdminResource() {
     console.log(resource, ">>>>>>>>>>>>>>>>>>>>>>");
 
     return (
-      <div className="h-100 overflow-y-scroll p-2 w-full">
+      <div className="h-100 overflow-y-scroll p-2 w-full relative">
+       
         <div className="flex justify-between w-full">
           <div className="flex">
             <StyledMenu
@@ -319,12 +275,22 @@ export default function AdminResource() {
                 </div>
               ))}
             </tbody>
+
           </table>
         </div>
+        <div className="fixed bottom-8 right-12 ">
+        <button
+          className="bg-blue-500 text-white rounded-full p-2 shadow-lg"
+          onClick={() => {
+            // {Booked}
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} className="text-4xl " />
+        </button>
+      </div>
       </div>
     );
   };
-
   CustomView.title = () => {
     return null;
   };
@@ -349,6 +315,13 @@ export default function AdminResource() {
     };
     const handleNavigate = (direction) => {
       onNavigate(direction, activeTab);
+    };
+    const handleBack = () => {
+      handleNavigate("Back");
+    };
+  
+    const handleNextt = () => {
+      handleNavigate("Nextt");
     };
     return (
       <>
@@ -396,7 +369,7 @@ export default function AdminResource() {
             </div>
           </div>
         ) : (
-          <>
+          <div className="flex justify-between items-center bg-gray-100">
             <div className="flex gap-1 p-3 bg-gray-100">
               <div className="">
                 <button
@@ -415,7 +388,7 @@ export default function AdminResource() {
                   MONTH
                 </button>
                 <button
-                  onClick={() => handleTabClick("grid")}
+                  onClick={() => handleTabClick('grid')}
                   className={`py-2 px-3 text-md font-semibold ${activeTab === "grid" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
                     }`}
                 >
@@ -428,24 +401,67 @@ export default function AdminResource() {
                 >
                   LIST
                 </button>
+
               </div>
+              <div className="">
+                <button
+                  onClick={() => handleNavigate("PREV")}
+                  className="rounded-r-sm py-2 px-1 bg-gray-300 hover:bg-gray-200"
+                >
+                  <ArrowBackIosIcon className="h-8 p-1" />
+                </button>
+                <button
+                  onClick={() => handleNavigate("NEXT")}
+                  className="rounded-r-sm ml-1 py-2 px-1 bg-gray-300 hover:bg-gray-200"
+                >
+                  <ArrowForwardIosIcon className="h-7 p-1" />
+                </button>
+                {/* <StaticDatePicker defaultValue={moment('2024-04-17')} /> */}
+                <span>  {label} </span>
+              </div>
+
+
+            </div>
+
+            <div className="flex bg-gray-100 p-3 items-center">
+              <select
+                className="form-control rounded-0 bg-gray-300 text-md font-semibold py-2 px-3"
+                value={newEvent && newEvent}
+                onChange={getEventData}
+                name="end"
+              >
+                <option value={newEvent && newEvent.spaces}>
+                  <span className="bg-gray-300">SPACES</span>
+                  <span> {newEvent && newEvent.spaces}</span>
+                </option>
+                <option value="None">Test q</option>
+                <option value="Daily">Test 2</option>
+                <option value="Weekly">Test 3</option>
+                <option value="Monthly">Test 4</option>
+                <option value="Yearly">Test 6</option>
+                <option value="Yearly">Test 7</option>
+                <option value="Yearly">Test 8</option>
+                <option value="Yearly">Test 9</option>
+                <option value="Yearly">Test 5</option>
+              </select>
               <button
-                onClick={() => handleNavigate("PREV")}
-                className="rounded-l-sm ml-2 bg-gray-300 hover:bg-gray-200"
+                onClick={() => handleBack("Back")}
+                className="rounded-l-sm ml-1 bg-gray-300 hover:bg-gray-200 py-2 px-1"
               >
                 <ArrowBackIosIcon className="h-8 p-1" />
               </button>
               <button
-                onClick={() => handleNavigate("NEXT")}
-                className="rounded-r-sm bg-gray-300 hover:bg-gray-200"
+                onClick={() => handleNextt("Nextt")}
+                className="rounded-r-sm ml-1 bg-gray-300 hover:bg-gray-200 py-2 px-1"
               >
                 <ArrowForwardIosIcon className="h-8 p-1" />
               </button>
-              {/* <StaticDatePicker defaultValue={moment('2024-04-17')} /> */}
-              <span>  {label} </span>
             </div>
-          </>
-          
+
+          </div>
+
+
+
         )
         }
       </>
@@ -978,26 +994,6 @@ export default function AdminResource() {
     console.log(myEvents);
   }, [myEvents]);
 
-  // const slotPropGetter = useCallback(
-  //   (date) => ({
-  //     className: 'slotDefault',
-  //     ...(moment(date).hour() < 8 && {
-  //       style: {
-  //         backgroundColor: 'powderblue',
-  //         color: 'black',
-
-  //       },
-  //     }),
-  //     ...(moment(date).hour() > 12 && {
-  //       style: {
-  //         backgroundColor: 'darkgreen',
-  //         color: 'white',
-  //       },
-  //     }),
-  //   }),
-  //   []
-  // )
-  
   return (
     <Fragment>
       <style>
@@ -1495,7 +1491,6 @@ export default function AdminResource() {
           </div>
         </Dialog>
       </Transition.Root>
-
       <Calendar
         defaultDate={defaultDate}
         // defaultView={Views.WEEK}
@@ -1523,6 +1518,9 @@ export default function AdminResource() {
         messages={{}}
       // slotPropGetter={slotPropGetter}
       />
+      
+<div>    <button>gggggggggggggggggggggggggggggggggggggg</button>
+</div>
     </Fragment>
   );
 }

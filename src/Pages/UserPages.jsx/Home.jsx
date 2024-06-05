@@ -38,7 +38,7 @@ const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 992);
     ) : (
       <Navbar className="" />
     )}
-      <div className="w-full overflow-hidden  h-[100vh]">
+      <div className="w-50 overflow-hidden  h-[100vh]">
         
         <div className="w-100 bg-white py-2">
           {/* <button
