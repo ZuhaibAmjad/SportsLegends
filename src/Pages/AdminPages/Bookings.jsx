@@ -6,6 +6,10 @@ import React, {
   useRef,
   useState,
 } from "react";
+
+import { v4 as uuidv4 } from 'uuid';
+
+
 import PropTypes from "prop-types";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -133,7 +137,7 @@ export default function AdminResource() {
 
     return (
       <div className="h-100 overflow-y-scroll p-2 w-full relative">
-       
+
         <div className="flex justify-between w-full">
           <div className="flex">
             <StyledMenu
@@ -280,15 +284,15 @@ export default function AdminResource() {
           </table>
         </div>
         <div className="fixed bottom-8 right-12 ">
-        <button
-          className="bg-blue-500 text-white rounded-full p-2 shadow-lg"
-          onClick={() => {
-            // {Booked}
-          }}
-        >
-          <FontAwesomeIcon icon={faPlus} className="text-4xl " />
-        </button>
-      </div>
+          <button
+            className="bg-blue-500 text-white rounded-full p-2 shadow-lg"
+            onClick={() => {
+              // {Booked}
+            }}
+          >
+            <FontAwesomeIcon icon={faPlus} className="text-4xl " />
+          </button>
+        </div>
       </div>
     );
   };
@@ -320,7 +324,7 @@ export default function AdminResource() {
     const handleBack = () => {
       handleNavigate("Back");
     };
-  
+
     const handleNextt = () => {
       handleNavigate("Nextt");
     };
@@ -749,41 +753,67 @@ export default function AdminResource() {
     });
   };
 
-  const handleSelectSlot = useCallback(
-    ({ start, end, resourceId, event }) => {
-      const isSlotEmpty = myEvents.every((event) => {
-        const eventStart = new Date(event.start);
-        const eventEnd = new Date(event.end);
-        return (
-          !(
-            (start >= eventStart && start < eventEnd) ||
-            (end > eventStart && end <= eventEnd) ||
-            (start <= eventStart && end >= eventEnd)
-          ) || event.resourceId !== resourceId
-        );
-      });
+  const handleSelect = ({ resourceId, start, end }) => {
+    const event = {
+      start,
+      end,
+      resourceId
+    }
 
-      if (!isSlotEmpty) {
-        window.alert("An event already exists at this time and resource.");
-        return;
+
+    // if (title)
+    setMyEvents([
+      ...myEvents,
+      {
+        start,
+        end,
+        // title,
+        resourceId
       }
-      const title = window.prompt("New Event name");
-      console.log("Title:", title);
-      if (title) {
-        const newEvent = {
-          start: new Date(start),
-          end: new Date(end),
-          // title,
-          resourceId,
-        };
-        console.log("New Event:", newEvent);
-        setSelectedEvent(newEvent);
-        setShowHeader(true);
-        setMyEvents((prev) => [...prev, newEvent]);
-      }
-    },
-    [setMyEvents, myEvents]
-  );
+    ]);
+
+    let price;
+    setSelectedEvent(event);
+    if (selectedItems && selectedItems.length >= 1) {
+      selectedItems.shift();
+    }
+    selectedItems.push(event?.resourceId);
+
+    const selectedResource = resource.find(
+      (resource) => resource._Id === event?.resourceId
+    );
+
+    if (selectedResource) {
+      price = selectedResource.resourcePrice;
+    } else {
+      price = 0;
+    }
+
+    const startDate = new Date(event?.start);
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, "0"); // Adding 1 to month since it starts from 0
+    const day = String(startDate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    console.log(formattedDate);
+
+    // setSelectedEvent({
+    //   ...selectedEvent,
+    //   date: formattedDate,
+    // })
+
+    setNewEvent({
+      ...newEvent,
+      price: price,
+      resourceId: event?.resourceId,
+      date: formattedDate,
+      id: uuidv4(),
+    });
+    console.log(event);
+    // setMyEvents(prevEvents => [...prevEvents, { ...newEvent, start: startDate, end: endDate }]);
+    setShowHeader(true);
+  };
+
 
   const CustomMonthEvent = ({ event }) => {
     const startTime = moment(event.start).format("h:mm A");
@@ -1492,7 +1522,7 @@ export default function AdminResource() {
           </div>
         </Dialog>
       </Transition.Root>
-      <Calendar
+      {/* <Calendar
         defaultDate={defaultDate}
         // defaultView={Views.WEEK}
         events={myEvents}
@@ -1518,9 +1548,45 @@ export default function AdminResource() {
         }}
         messages={{}}
       // slotPropGetter={slotPropGetter}
+      /> */}
+
+      <Calendar
+        defaultDate={defaultDate}
+        // defaultView={Views.WEEK}
+        events={myEvents}
+        localizer={localizer}
+        resourceIdAccessor="_id"
+        resources={resource}
+        resourceTitleAccessor="name"
+        step={30}
+        // resourceComponent={ResourceComponent}
+        //   min={new Date().setHours(0, 0, 0)}
+        // max={new Date().setHours(21, 59, 59)}
+        // onSelectEvent={handleSelectEvent}
+        // onSelectSlot={selecting}
+        // onSelecting={handleSelect}
+        onSelectEvent={Booked}
+        onSelectSlot={handleSelect}
+        components={components}
+        selectable
+        popup={CustomPopup}
+        scrollToTime={scrollToTime}
+        views={{
+          week: CustomView, // Use your custom component here
+          day: true, // Enable day view
+          month: true, // Enable month view
+        }}
+        messages={{}}
+      // slotPropGetter={slotPropGetter}
       />
+<<<<<<< HEAD
       
 
+=======
+
+      <div>    <button>gggggggggggggggggggggggggggggggggggggg</button>
+      </div>
+>>>>>>> 753aa3af279879b0976ec393d307b9ab997f679b
     </Fragment>
   );
 }
