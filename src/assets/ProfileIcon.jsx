@@ -1,7 +1,7 @@
 import React from "react";
 const ProfileIcon = (props) => (
   <svg
-    className="svg-inline--fa fa-user fa-lg"
+    className="svg-inline--fa fa-user fa-lg size-5"
     data-prefix="fal"
     data-icon="user"
     aria-hidden="true"

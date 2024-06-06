@@ -1579,14 +1579,9 @@ export default function AdminResource() {
         messages={{}}
       // slotPropGetter={slotPropGetter}
       />
-<<<<<<< HEAD
+
+
       
-
-=======
-
-      <div>    <button>gggggggggggggggggggggggggggggggggggggg</button>
-      </div>
->>>>>>> 753aa3af279879b0976ec393d307b9ab997f679b
     </Fragment>
   );
 }
