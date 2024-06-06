@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function BookingWindow() {
+export default function Pricing() {
   return (
     <div>
       

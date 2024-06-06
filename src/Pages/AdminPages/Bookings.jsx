@@ -41,7 +41,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import DatePicker from "@mui/lab/DatePicker";
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import { styled, alpha } from "@mui/material/styles";
-import { v4 as uuidv4 } from 'uuid';
+
 const localizer = momentLocalizer(moment);
 
 // const resourceMap = [
@@ -153,7 +153,6 @@ export default function AdminResource() {
     type: "",
     paymentStatus: "",
     userID: "",
-    id: ""
   });
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -161,7 +160,7 @@ export default function AdminResource() {
 
   const CustomView = ({ events }) => {
     const eventsByDate = events.reduce((acc, event) => {
-      const date = event?.start?.toDateString();
+      const date = event.start.toDateString();
       if (!acc[date]) {
         acc[date] = [];
       }
@@ -255,18 +254,18 @@ export default function AdminResource() {
           </div>
         )} */}
             </StyledMenu>
-            <input
-              type="text"
-              name="email"
-              size="small"
-              // onChange={getUserdata}
-              required
-              class="form-control rounded-0"
-              placeholder="Search"
-              aria-label="Recipient's username"
-              aria-describedby="basic-addon2"
-            />
-            <button className="border p-1 m-1">Activity </button>
+              <input
+                type="text"
+                name="email"
+                size="small"
+                // onChange={getUserdata}
+                required
+                class="form-control rounded-0"
+                placeholder="Search"
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+              />
+              <button className="border p-1 m-1">Activity </button>
           </div>
           <div className="flex">
             <p className="bg-green-100 border p-1 m-1 rounded-1">20 match</p>
@@ -287,13 +286,13 @@ export default function AdminResource() {
                       <td
                         style={{ width: "20%" }}
                         className="whitespace-nowrap p-1 text-gray-700"
-                        key={event?.id}
+                        key={event.id}
                       >
-                        {event?.start?.toLocaleTimeString()} -{" "}
-                        {event?.end?.toLocaleTimeString()}
+                        {event.start.toLocaleTimeString()} -{" "}
+                        {event.end.toLocaleTimeString()}
                       </td>
                       <td style={{ width: "15%" }}>
-                        {event?.resourceId?.map((eventId) => {
+                        {event.resourceId.map((eventId) => {
                           // Find matching resource for each event ID
                           const matchingResource = resource.find(
                             (resource) => resource._id === eventId
@@ -307,9 +306,9 @@ export default function AdminResource() {
                           return null; // Render nothing if no match
                         })}
                       </td>
-                      <td style={{ width: "15%" }}>{event?.userId}</td>
-                      <td style={{ width: "40%" }}>{event?.title}</td>
-                      <td style={{ width: "10%" }}>{event?.paymentStatus}</td>
+                      <td style={{ width: "15%" }}>{event.userId}</td>
+                      <td style={{ width: "40%" }}>{event.title}</td>
+                      <td style={{ width: "10%" }}>{event.paymentStatus}</td>
                     </tr>
                   ))}
                 </div>
@@ -348,33 +347,33 @@ export default function AdminResource() {
                 icon={faCalendarPlus}
               />
               <span className="border-r-2 border-gray-500 pr-3">
-                {newEvent && newEvent?.date && newEvent?.date}
+                {newEvent && newEvent.date && newEvent.date}
               </span>
             </div>
             <div className="flex justify-center items-center ">
               <FontAwesomeIcon className="h-5 mr-3" icon={faClock} />
               <span className="border-r-2 border-gray-500 pr-3">
-                {moment(selectedEvent && selectedEvent?.start).format("h:mm A")}{" "}
-                - {moment(selectedEvent && selectedEvent?.end).format("h:mm A")}
+                {moment(selectedEvent && selectedEvent.start).format("h:mm A")}{" "}
+                - {moment(selectedEvent && selectedEvent.end).format("h:mm A")}
               </span>
             </div>
             <div className="flex justify-center items-center">
-              {selectedEvent && selectedEvent?.end && (
+              {selectedEvent && selectedEvent.end && (
                 <div className="border-r-2 border-gray-500 pr-3">
                   {resource.map((space) => {
-                    if (space._id === selectedEvent?.resourceId) {
+                    if (space._id === selectedEvent.resourceId) {
                       return <p key={space._id}>{space.name}</p>;
                     }
                   })}
                   {!resource.find(
-                    (space) => space._id === selectedEvent?.resourceId
+                    (space) => space._id === selectedEvent.resourceId
                   ) && <p>Unknown Resource</p>}
                 </div>
               )}
             </div>
 
             <div className=" pr-3 flex justify-center items-center">
-              {newEvent && newEvent?.price}
+              {newEvent && newEvent.price}
             </div>
             <div className="border p-2  flex justify-center items-center bg-green-400 hover:bg-green-600 text-white px-4">
               <button onClick={Booked}>Book</button>
@@ -466,61 +465,115 @@ export default function AdminResource() {
 
   const MakeBooking = async (e) => {
     e.preventDefault();
-    const { date, title, start, end, resourceId, type, price, paymentStatus } = newEvent;
+    const {
+      date,
+      title,
+      start,
+      end,
+      resourceId,
+      type,
+      price,
+      paymentStatus,
+      userID,
+    } = newEvent;
 
-    if (!(date && title && start && end && resourceId && type)) {
-      // Log error or set error message as needed
-      return;
-    }
+    let data;
+    if (date && title && start && end && resourceId && type) {
+      console.log(newEvent);
 
+      // Extract year, month, and day from the date string
+      const [year, month, day] = newEvent.date.split("-").map(Number);
 
-    // Utility function to parse dates and convert times to 24-hour format
-    const parseDateAndTime = (dateStr, timeStr) => {
-      const [year, month, day] = dateStr.split("-").map(Number);
-      const [hour, minute] = convertTo24Hour(timeStr).split(":").map(Number);
-      return new Date(year, month - 1, day, hour, minute);
-    };
+      // Convert start and end times to 24-hour format
+      const [startHour, startMinute] = convertTo24Hour(newEvent.start)
+        .split(":")
+        .map(Number);
+      const [endHour, endMinute] = convertTo24Hour(newEvent.end)
+        .split(":")
+        .map(Number);
 
-    const startDate = parseDateAndTime(date, start);
-    const endDate = parseDateAndTime(date, end);
+      // Create Date objects for start and end times
+      const startDate = new Date(year, month - 1, day, startHour, startMinute);
+      const endDate = new Date(year, month - 1, day, endHour, endMinute);
+      try {
+        const token = cookies.get("authorization");
+        console.log(token);
+        const userId = cookies.get("userId");
+        console.log(userId);
+        const params = new URLSearchParams();
+        params.append("date", date);
+        params.append("title", title);
+        params.append("start", startDate);
+        params.append("end", endDate);
+        // params.append("resourceId", resourceId);
+        params.append("type", type);
+        params.append("price", price);
+        params.append("paymentStatus", paymentStatus);
+        params.append("userID", userId);
+        resourceId.forEach((id) => params.append("resourceId", id));
 
-    try {
-      const token = cookies.get("authorization");
-      const userId = cookies.get("userId");
-
-      const params = new URLSearchParams({
-        date, title, type, price, paymentStatus, userID: userId
-      });
-      resourceId.forEach(id => params.append("resourceId", id));
-      params.append("start", startDate.toISOString());
-      params.append("end", endDate.toISOString());
-
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/booking`, params, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: token,
-        },
-        withCredentials: true,
-      });
-
-      console.log(response);
-      if (response.status === 201) {
-        setMyEvents(prevEvents => [...prevEvents, { ...newEvent, start: startDate, end: endDate }]);
-        closeDailog();
-      }
-    } catch (error) {
-      if (error.response) {
-        const { status } = error.response;
-        if (status === 401 || status === 403 || status === 500) {
-          alert('Authentication error. Please log in.');
+        const response = await axios.post(
+          `${process.env.REACT_APP_BASE_URL}/booking`,
+          params,
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(response);
+        data = response.data;
+        console.log(data);
+        if (response && response.status === 201) {
+          const AddEvent = {
+            ...newEvent,
+            start: startDate,
+            end: endDate,
+          };
+          const updatedEvents = [...myEvents, AddEvent];
+          setMyEvents(updatedEvents);
+          closeDailog();
+        }
+      } catch (error) {
+        if (error && error.response.status === 401) {
+          // setErrMsg(
+          //   "Sorry, your login credentials are not correct. Please double-check your email and password. You can use the login-reset feature if you have forgotten your password."
+          // );
+          // setLoading(false);
+          // setError(true);
+          console.log(error);
+          return;
+        } else if (error && error.response.status === 403) {
+          // setErrMsg("Internel Server Error");
+          // setLoading(false);
+          // setError(true);
+          alert("Please Login First");
+          console.log(error);
+          return;
+        } else if (error && error.response.status === 500) {
+          // setErrMsg("Internel Server Error");
+          // setLoading(false);
+          // setError(true);
+          console.log(error);
+          return;
         } else {
-          alert('Please check your Internet connection and try again.');
+          alert("Please Check your Internet Connection and Try Again");
+          // setLoading(false);
+          // setError(true);
+          console.log(error);
+          return;
         }
       }
-      console.log(error);
+    } else {
+      // setErrMsg("Please Enter Email and Password to Continue");
+      // setLoading(false);
+      // setError(true);
+      // console.log(error);
+      return;
     }
   };
-
 
   const getEvents = async () => {
     try {
@@ -531,9 +584,9 @@ export default function AdminResource() {
       if (response.status === 200) {
         const modifiedEvents = result.map((event) => ({
           ...event,
-          id: event?._id,
-          end: new Date(event?.end),
-          start: new Date(event?.start), // Convert start to a Date object
+          id: event._id,
+          end: new Date(event.end),
+          start: new Date(event.start), // Convert start to a Date object
         }));
         console.log(modifiedEvents, "Result");
 
@@ -561,7 +614,7 @@ export default function AdminResource() {
     console.log("Trigeered >>>>>");
     setMyEvents((prevUsers) =>
       prevUsers.map((event) =>
-        event?._id === updatedUser._id ? { ...event, ...updatedUser } : event
+        event._id === updatedUser._id ? { ...event, ...updatedUser } : event
       )
     );
   };
@@ -590,19 +643,19 @@ export default function AdminResource() {
   const CreateEvent = () => {
     console.log(newEvent);
 
-    // Check the values of newEvent?.date, newEvent?.start, and newEvent?.end
-    // console.log("Date:", newEvent?.date);
-    // console.log("Start:", newEvent?.start);
-    // console.log("End:", newEvent?.end);
+    // Check the values of newEvent.date, newEvent.start, and newEvent.end
+    // console.log("Date:", newEvent.date);
+    // console.log("Start:", newEvent.start);
+    // console.log("End:", newEvent.end);
 
     // Extract year, month, and day from the date string
-    const [year, month, day] = newEvent?.date.split("-").map(Number);
+    const [year, month, day] = newEvent.date.split("-").map(Number);
 
     // Convert start and end times to 24-hour format
-    const [startHour, startMinute] = convertTo24Hour(newEvent?.start)
+    const [startHour, startMinute] = convertTo24Hour(newEvent.start)
       .split(":")
       .map(Number);
-    const [endHour, endMinute] = convertTo24Hour(newEvent?.end)
+    const [endHour, endMinute] = convertTo24Hour(newEvent.end)
       .split(":")
       .map(Number);
 
@@ -642,63 +695,62 @@ export default function AdminResource() {
     return `${hours}:${minutes}`;
   };
 
-  const Booked = (event) => {
-
+  const Booked = () => {
     setOpen(true);
     setNewEvent({
-      ...event,
-      start: new Date(event?.start).toLocaleTimeString([], {
+      ...newEvent,
+      start: new Date(selectedEvent.start).toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),
-      end: new Date(event?.end).toLocaleTimeString([], {
+      end: new Date(selectedEvent.end).toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),
       type: "user",
-      resourceId: Array.isArray(event?.resourceId) ? event?.resourceId : [event?.resourceId],
+      resourceId: [selectedEvent.resourceId],
     });
   };
 
-  // const handleSelectSlot = useCallback(
-  //   ({ start, end, resourceId }) => {
-  //     const isSlotEmpty = myEvents.every((event) => {
-  //       const eventStart = new Date(event?.start);
-  //       const eventEnd = new Date(event?.end);
-  //       return (
-  //         !(
-  //           (start >= eventStart && start < eventEnd) ||
-  //           (end > eventStart && end <= eventEnd) ||
-  //           (start <= eventStart && end >= eventEnd)
-  //         ) || event?.resourceId !== resourceId
-  //       );
-  //     });
+  const handleSelectSlot = useCallback(
+    ({ start, end, resourceId, event }) => {
+      const isSlotEmpty = myEvents.every((event) => {
+        const eventStart = new Date(event.start);
+        const eventEnd = new Date(event.end);
+        return (
+          !(
+            (start >= eventStart && start < eventEnd) ||
+            (end > eventStart && end <= eventEnd) ||
+            (start <= eventStart && end >= eventEnd)
+          ) || event.resourceId !== resourceId
+        );
+      });
 
-  //     if (!isSlotEmpty) {
-  //       window.alert("An event already exists at this time and resource.");
-  //       return;
-  //     }
-  //     const title = window.prompt("New Event name");
-  //     console.log("Title:", title);
-  //     if (title) {
-  //       const newEvent = {
-  //         start: new Date(start),
-  //         end: new Date(end),
-  //         // title,
-  //         resourceId,
-  //       };
-  //       console.log("New Event:", newEvent);
-  //       setSelectedEvent(newEvent);
-  //       setShowHeader(true);
-  //       setMyEvents((prev) => [...prev, newEvent]);
-  //     }
-  //   },
-  //   [setMyEvents, myEvents]
-  // );
+      if (!isSlotEmpty) {
+        window.alert("An event already exists at this time and resource.");
+        return;
+      }
+      const title = window.prompt("New Event name");
+      console.log("Title:", title);
+      if (title) {
+        const newEvent = {
+          start: new Date(start),
+          end: new Date(end),
+          // title,
+          resourceId,
+        };
+        console.log("New Event:", newEvent);
+        setSelectedEvent(newEvent);
+        setShowHeader(true);
+        setMyEvents((prev) => [...prev, newEvent]);
+      }
+    },
+    [setMyEvents, myEvents]
+  );
 
   const CustomMonthEvent = ({ event }) => {
-    const startTime = moment(event?.start).format("h:mm A");
-    const endTime = moment(event?.end).format("h:mm A");
+    const startTime = moment(event.start).format("h:mm A");
+    const endTime = moment(event.end).format("h:mm A");
     return (
       <div>
         <p className="custum-month">
@@ -709,8 +761,8 @@ export default function AdminResource() {
   };
 
   const CustomPopup = ({ event }) => {
-    const startTime = moment(event?.start).format("h:mm A");
-    const endTime = moment(event?.end).format("h:mm A");
+    const startTime = moment(event.start).format("h:mm A");
+    const endTime = moment(event.end).format("h:mm A");
     return (
       // Custom popup JSX
       <div className="custum-month">
@@ -749,7 +801,7 @@ export default function AdminResource() {
       setShowTooltip(!showTooltip);
     };
 
-    if (event?.type === "user") {
+    if (event.type === "user") {
       return (
         <UserBooking
           myObject={event}
@@ -758,9 +810,9 @@ export default function AdminResource() {
           updateUser={updateUser}
         />
       );
-    } else if (event?.type === "not_availabel") {
+    } else if (event.type === "not_availabel") {
       return <UnavailableEvent myObject={event} />;
-    } else if (event?.type === "internel") {
+    } else if (event.type === "internel") {
       return (
         <InternelEvent
           myObject={event}
@@ -788,36 +840,16 @@ export default function AdminResource() {
     []
   );
 
-
-
-  const handleSelect = ({ resourceId, start, end }) => {
-    const event = {
-      start,
-      end,
-      resourceId
-    }
-
-
-    // if (title)
-    setMyEvents([
-      ...myEvents,
-      {
-        start,
-        end,
-        // title,
-        resourceId
-      }
-    ]);
-
+  const selecting = (event, date) => {
     let price;
     setSelectedEvent(event);
     if (selectedItems && selectedItems.length >= 1) {
       selectedItems.shift();
     }
-    selectedItems.push(event?.resourceId);
+    selectedItems.push(event.resourceId);
 
     const selectedResource = resource.find(
-      (resource) => resource._Id === event?.resourceId
+      (resource) => resource._Id === event.resourceId
     );
 
     if (selectedResource) {
@@ -826,7 +858,7 @@ export default function AdminResource() {
       price = 0;
     }
 
-    const startDate = new Date(event?.start);
+    const startDate = new Date(event.start);
     const year = startDate.getFullYear();
     const month = String(startDate.getMonth() + 1).padStart(2, "0"); // Adding 1 to month since it starts from 0
     const day = String(startDate.getDate()).padStart(2, "0");
@@ -842,12 +874,11 @@ export default function AdminResource() {
     setNewEvent({
       ...newEvent,
       price: price,
-      resourceId: event?.resourceId,
+      resourceId: event.resourceId,
       date: formattedDate,
-      id: uuidv4(),
     });
     console.log(event);
-    // setMyEvents(prevEvents => [...prevEvents, { ...newEvent, start: startDate, end: endDate }]);
+
     setShowHeader(true);
   };
 
@@ -894,8 +925,6 @@ export default function AdminResource() {
     setOpen(false);
     setShowHeader(false);
     setSelectedItems([]);
-
-    clearSelectedEvent()
     setNewEvent({
       date: "",
       title: "",
@@ -904,7 +933,6 @@ export default function AdminResource() {
       resourceId: "",
       price: "",
       paymentStatus: "",
-      id: ""
     });
   };
 
@@ -926,20 +954,9 @@ export default function AdminResource() {
     }));
   }, [selectedItems]);
 
-
-  const clearSelectedEvent = () => {
-    console.log("hsdasdsa", newEvent)
-    if (newEvent.id) {
-      setMyEvents((pre) => {
-
-        console.log("pre.filter(item => item?.id !== newEvent.id)", pre.filter(item => item?.id !== newEvent.id))
-        return pre.filter(item => item?.id !== newEvent.id)
-      })
-    }
-  }
-
-
-
+  useEffect(() => {
+    console.log(myEvents);
+  }, [myEvents]);
 
   // const slotPropGetter = useCallback(
   //   (date) => ({
@@ -1012,28 +1029,31 @@ export default function AdminResource() {
                             <div className="grid lg:grid-cols-1 md:grid-cols-1  mt-2 px-5 py-3 ">
                               <div className="lg:grid-cols-3 md:grid-cols-3 sm:grid-col-1 my-3 space-x-3">
                                 <button
-                                  className={`border  ${currentPage === "user"
-                                    ? "bg-blue-500 text-white"
-                                    : "hover:bg-gray-100"
-                                    } p-2`}
+                                  className={`border  ${
+                                    currentPage === "user"
+                                      ? "bg-blue-500 text-white"
+                                      : "hover:bg-gray-100"
+                                  } p-2`}
                                   onClick={() => PageChange("user")}
                                 >
                                   User Booking
                                 </button>
                                 <button
-                                  className={`border  ${currentPage === "internal"
-                                    ? "bg-blue-500 text-white"
-                                    : "hover:bg-gray-100"
-                                    } p-2`}
+                                  className={`border  ${
+                                    currentPage === "internal"
+                                      ? "bg-blue-500 text-white"
+                                      : "hover:bg-gray-100"
+                                  } p-2`}
                                   onClick={() => PageChange("internal")}
                                 >
                                   Internal Use
                                 </button>
                                 <button
-                                  className={`border  ${currentPage === "unavailable"
-                                    ? "bg-blue-500 text-white"
-                                    : "hover:bg-gray-100"
-                                    } p-2`}
+                                  className={`border  ${
+                                    currentPage === "unavailable"
+                                      ? "bg-blue-500 text-white"
+                                      : "hover:bg-gray-100"
+                                  } p-2`}
                                   onClick={() => PageChange("unavailable")}
                                 >
                                   Unavailable
@@ -1052,7 +1072,7 @@ export default function AdminResource() {
                                       <input
                                         type="date"
                                         name="date"
-                                        value={newEvent?.date}
+                                        value={newEvent.date}
                                         onChange={getEventData}
                                         class="form-control rounded-0"
                                         placeholder="e.g Sally"
@@ -1066,13 +1086,13 @@ export default function AdminResource() {
                                       <select
                                         className="form-control rounded-0"
                                         name="start"
-                                        value={newEvent && newEvent?.start}
+                                        value={newEvent && newEvent.start}
                                         onChange={getEventData}
                                       >
                                         <option
-                                          value={newEvent && newEvent?.start}
+                                          value={newEvent && newEvent.start}
                                         >
-                                          {newEvent && newEvent?.start}
+                                          {newEvent && newEvent.start}
                                         </option>
                                         <option value="12:00 AM">
                                           12:00 AM
@@ -1151,14 +1171,14 @@ export default function AdminResource() {
                                     <div>
                                       <select
                                         className="form-control rounded-0"
-                                        value={newEvent && newEvent?.end}
+                                        value={newEvent && newEvent.end}
                                         onChange={getEventData}
                                         name="end"
                                       >
                                         <option
-                                          value={newEvent && newEvent?.end}
+                                          value={newEvent && newEvent.end}
                                         >
-                                          {newEvent && newEvent?.end}
+                                          {newEvent && newEvent.end}
                                         </option>
                                         <option value="12:00 AM">
                                           12:00 AM
@@ -1343,8 +1363,8 @@ export default function AdminResource() {
                                         onChange={getEventData}
                                         name="price"
                                         value={
-                                          newEvent && newEvent?.price
-                                            ? newEvent?.price
+                                          newEvent && newEvent.price
+                                            ? newEvent.price
                                             : ""
                                         }
                                         placeholder="00"
@@ -1412,10 +1432,8 @@ export default function AdminResource() {
         //   min={new Date().setHours(0, 0, 0)}
         // max={new Date().setHours(21, 59, 59)}
         // onSelectEvent={handleSelectEvent}
-        // onSelectSlot={selecting}
-        // onSelecting={handleSelect}
-        onSelectEvent={Booked}
-        onSelectSlot={handleSelect}
+        onSelectSlot={selecting}
+        onSelecting={selecting}
         components={components}
         selectable
         popup={CustomPopup}
@@ -1426,9 +1444,8 @@ export default function AdminResource() {
           month: true, // Enable month view
         }}
         messages={{}}
-      // slotPropGetter={slotPropGetter}
+        // slotPropGetter={slotPropGetter}
       />
-
     </Fragment>
   );
 }
