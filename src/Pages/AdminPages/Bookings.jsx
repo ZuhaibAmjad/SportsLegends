@@ -6,6 +6,10 @@ import React, {
   useRef,
   useState,
 } from "react";
+
+import { v4 as uuidv4 } from 'uuid';
+
+
 import PropTypes from "prop-types";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -26,10 +30,16 @@ import moment from "moment";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faCalendarPlus,
   faClock,
+  faCircleXmark,
+  faBan,
+  faHouseUser,
   faUser,
+  faPlus,
+
 } from "@fortawesome/free-solid-svg-icons";
 import UnavailableEvent from "../../Components/UnavailableEvent";
 import UserBooking from "../../Components/UserBooking";
@@ -43,52 +53,6 @@ import { StaticDatePicker } from "@mui/x-date-pickers";
 import { styled, alpha } from "@mui/material/styles";
 
 const localizer = momentLocalizer(moment);
-
-// const resourceMap = [
-//   {
-//     resourceId: 1,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 1",
-//   },
-//   {
-//     resourceId: 2,
-//     resourcePrice: 3500,
-//     resourceTitle: "Padel Court 2",
-//   },
-//   {
-//     resourceId: 3,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 3",
-//   },
-//   {
-//     resourceId: 4,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 4",
-//   },
-//   {
-//     resourceId: 5,
-//     resourcePrice: 3000,
-//     resourceTitle: "Padel Court 5",
-//   },
-//   {
-//     resourceId: 6,
-//     resourcePrice: 3000,
-//     resourceTitle: "Cricket ( 9-aside )",
-//   },
-//   {
-//     resourceId: 7,
-//     resourcePrice: 2000,
-//     resourceTitle: "Cricket ( 7-aside )",
-//   },
-//   {
-//     resourceId: 8,
-//     resourcePrice: 4000,
-//     resourceTitle: "Super Sunday ( 7-aside )",
-//     start: new Date().setHours(11, 0, 0), // 12pm
-//     end: new Date().setHours(23, 0, 0),
-//   },
-// ];
-
 const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
@@ -171,7 +135,8 @@ export default function AdminResource() {
     console.log(resource, ">>>>>>>>>>>>>>>>>>>>>>");
 
     return (
-      <div className="h-100 overflow-y-scroll p-2 w-full">
+      <div className="h-100 overflow-y-scroll p-2 w-full relative">
+
         <div className="flex justify-between w-full">
           <div className="flex">
             <StyledMenu
@@ -254,18 +219,18 @@ export default function AdminResource() {
           </div>
         )} */}
             </StyledMenu>
-              <input
-                type="text"
-                name="email"
-                size="small"
-                // onChange={getUserdata}
-                required
-                class="form-control rounded-0"
-                placeholder="Search"
-                aria-label="Recipient's username"
-                aria-describedby="basic-addon2"
-              />
-              <button className="border p-1 m-1">Activity </button>
+            <input
+              type="text"
+              name="email"
+              size="small"
+              // onChange={getUserdata}
+              required
+              class="form-control rounded-0"
+              placeholder="Search"
+              aria-label="Recipient's username"
+              aria-describedby="basic-addon2"
+            />
+            <button className="border p-1 m-1">Activity </button>
           </div>
           <div className="flex">
             <p className="bg-green-100 border p-1 m-1 rounded-1">20 match</p>
@@ -314,12 +279,22 @@ export default function AdminResource() {
                 </div>
               ))}
             </tbody>
+
           </table>
+        </div>
+        <div className="fixed bottom-8 right-12 ">
+          <button
+            className="bg-blue-500 text-white rounded-full p-2 shadow-lg"
+            onClick={() => {
+              // {Booked}
+            }}
+          >
+            <FontAwesomeIcon icon={faPlus} className="text-4xl " />
+          </button>
         </div>
       </div>
     );
   };
-
   CustomView.title = () => {
     return null;
   };
@@ -337,6 +312,21 @@ export default function AdminResource() {
   // }
 
   const CustomToolbar = ({ label, onNavigate, onView }) => {
+    const [activeTab, setActiveTab] = useState("day");
+    const handleTabClick = (view) => {
+      setActiveTab(view);
+      onView(view);
+    };
+    const handleNavigate = (direction) => {
+      onNavigate(direction, activeTab);
+    };
+    const handleBack = () => {
+      handleNavigate("Back");
+    };
+
+    const handleNextt = () => {
+      handleNavigate("Nextt");
+    };
     return (
       <>
         {showHeader ? (
@@ -383,51 +373,101 @@ export default function AdminResource() {
             </div>
           </div>
         ) : (
-          <>
-            <div className="flex p-3 bg-gray-100">
+          <div className="flex justify-between items-center bg-gray-100">
+            <div className="flex gap-1 p-3 bg-gray-100">
               <div className="">
                 <button
-                  onClick={() => onView("day")}
-                  className="rounded-l-sm bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick("day")}
+                  className={`rounded-l-sm py-2 px-3 text-md font-semibold ${activeTab === "day" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   DAY
                 </button>
+
                 <button
-                  onClick={() => onView("month")}
-                  className="bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick("month")}
+                  className={`py-2 px-3 text-md font-semibold ${activeTab === "month" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   MONTH
                 </button>
                 <button
-                  onClick={() => onView("day")}
-                  className="bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick('grid')}
+                  className={`py-2 px-3 text-md font-semibold ${activeTab === "grid" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   GRID
                 </button>
                 <button
-                  onClick={() => onView("week")}
-                  className="rounded-r-sm bg-gray-300 py-2 px-3 text-md font-semibold hover:bg-gray-200 "
+                  onClick={() => handleTabClick("week")}
+                  className={`rounded-r-sm py-2 px-3 text-md font-semibold ${activeTab === "week" ? "bg-white" : "bg-gray-300 hover:bg-gray-200"
+                    }`}
                 >
                   LIST
                 </button>
+
               </div>
+              <div className="">
+                <button
+                  onClick={() => handleNavigate("PREV")}
+                  className="rounded-r-sm py-2 px-1 bg-gray-300 hover:bg-gray-200"
+                >
+                  <ArrowBackIosIcon className="h-8 p-1" />
+                </button>
+                <button
+                  onClick={() => handleNavigate("NEXT")}
+                  className="rounded-r-sm ml-1 py-2 px-1 bg-gray-300 hover:bg-gray-200"
+                >
+                  <ArrowForwardIosIcon className="h-7 p-1" />
+                </button>
+                {/* <StaticDatePicker defaultValue={moment('2024-04-17')} /> */}
+                <span>  {label} </span>
+              </div>
+
+
+            </div>
+
+            <div className="flex bg-gray-100 p-3 items-center">
+              <select
+                className="form-control rounded-0 bg-gray-300 text-md font-semibold py-2 px-3"
+                value={newEvent && newEvent}
+                onChange={getEventData}
+                name="end"
+              >
+                <option value={newEvent && newEvent.spaces}>
+                  <span className="bg-gray-300">SPACES</span>
+                  <span> {newEvent && newEvent.spaces}</span>
+                </option>
+                <option value="None">Test q</option>
+                <option value="Daily">Test 2</option>
+                <option value="Weekly">Test 3</option>
+                <option value="Monthly">Test 4</option>
+                <option value="Yearly">Test 6</option>
+                <option value="Yearly">Test 7</option>
+                <option value="Yearly">Test 8</option>
+                <option value="Yearly">Test 9</option>
+                <option value="Yearly">Test 5</option>
+              </select>
               <button
-                onClick={() => onNavigate("PREV")}
-                className="rounded-l-sm ml-2 bg-gray-300 hover:bg-gray-200"
+                onClick={() => handleBack("Back")}
+                className="rounded-l-sm ml-1 bg-gray-300 hover:bg-gray-200 py-2 px-1"
               >
                 <ArrowBackIosIcon className="h-8 p-1" />
               </button>
               <button
-                onClick={() => onNavigate("NEXT")}
-                className="rounded-r-sm bg-gray-300 hover:bg-gray-200"
+                onClick={() => handleNextt("Nextt")}
+                className="rounded-r-sm ml-1 bg-gray-300 hover:bg-gray-200 py-2 px-1"
               >
                 <ArrowForwardIosIcon className="h-8 p-1" />
               </button>
-              {/* <StaticDatePicker defaultValue={moment('2024-04-17')} /> */}
-              <span>{label}</span>
             </div>
-          </>
-        )}
+
+          </div>
+
+
+
+        )
+        }
       </>
     );
   };
@@ -712,41 +752,67 @@ export default function AdminResource() {
     });
   };
 
-  const handleSelectSlot = useCallback(
-    ({ start, end, resourceId, event }) => {
-      const isSlotEmpty = myEvents.every((event) => {
-        const eventStart = new Date(event.start);
-        const eventEnd = new Date(event.end);
-        return (
-          !(
-            (start >= eventStart && start < eventEnd) ||
-            (end > eventStart && end <= eventEnd) ||
-            (start <= eventStart && end >= eventEnd)
-          ) || event.resourceId !== resourceId
-        );
-      });
+  const handleSelect = ({ resourceId, start, end }) => {
+    const event = {
+      start,
+      end,
+      resourceId
+    }
 
-      if (!isSlotEmpty) {
-        window.alert("An event already exists at this time and resource.");
-        return;
+
+    // if (title)
+    setMyEvents([
+      ...myEvents,
+      {
+        start,
+        end,
+        // title,
+        resourceId
       }
-      const title = window.prompt("New Event name");
-      console.log("Title:", title);
-      if (title) {
-        const newEvent = {
-          start: new Date(start),
-          end: new Date(end),
-          // title,
-          resourceId,
-        };
-        console.log("New Event:", newEvent);
-        setSelectedEvent(newEvent);
-        setShowHeader(true);
-        setMyEvents((prev) => [...prev, newEvent]);
-      }
-    },
-    [setMyEvents, myEvents]
-  );
+    ]);
+
+    let price;
+    setSelectedEvent(event);
+    if (selectedItems && selectedItems.length >= 1) {
+      selectedItems.shift();
+    }
+    selectedItems.push(event?.resourceId);
+
+    const selectedResource = resource.find(
+      (resource) => resource._Id === event?.resourceId
+    );
+
+    if (selectedResource) {
+      price = selectedResource.resourcePrice;
+    } else {
+      price = 0;
+    }
+
+    const startDate = new Date(event?.start);
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, "0"); // Adding 1 to month since it starts from 0
+    const day = String(startDate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    console.log(formattedDate);
+
+    // setSelectedEvent({
+    //   ...selectedEvent,
+    //   date: formattedDate,
+    // })
+
+    setNewEvent({
+      ...newEvent,
+      price: price,
+      resourceId: event?.resourceId,
+      date: formattedDate,
+      id: uuidv4(),
+    });
+    console.log(event);
+    // setMyEvents(prevEvents => [...prevEvents, { ...newEvent, start: startDate, end: endDate }]);
+    setShowHeader(true);
+  };
+
 
   const CustomMonthEvent = ({ event }) => {
     const startTime = moment(event.start).format("h:mm A");
@@ -958,25 +1024,6 @@ export default function AdminResource() {
     console.log(myEvents);
   }, [myEvents]);
 
-  // const slotPropGetter = useCallback(
-  //   (date) => ({
-  //     className: 'slotDefault',
-  //     ...(moment(date).hour() < 8 && {
-  //       style: {
-  //         backgroundColor: 'powderblue',
-  //         color: 'black',
-
-  //       },
-  //     }),
-  //     ...(moment(date).hour() > 12 && {
-  //       style: {
-  //         backgroundColor: 'darkgreen',
-  //         color: 'white',
-  //       },
-  //     }),
-  //   }),
-  //   []
-  // )
   return (
     <Fragment>
       <style>
@@ -1023,42 +1070,55 @@ export default function AdminResource() {
                       <div className="w-full ">
                         <div className="">
                           <div className="border">
-                            <h1 className="bg-blue-500 text-white w-100 px-4 py-3 fs-4 text-semibold">
-                              NEW BOOKING
-                            </h1>
+
+                            <div className="flex justify-between items-center bg-blue-500 text-white px-4 py-3">
+                              <div className="flex items-center">
+                                <FontAwesomeIcon
+                                  className="h-5 mr-2 bg-blue-500 p-2 text-white rounded-5"
+                                  icon={faCalendarPlus}
+                                />
+                                <h1 className="fs-4 text-semibold">
+                                  NEW BOOKING
+                                </h1>
+                              </div>
+                              <button
+                                onClick={closeDailog}
+                                className="rounded-full p-2 text-sm hover:bg-blue-700 flex items-center bg-blue-500 text-white"
+                                ref={cancelButtonRef}
+                              >
+                                <FontAwesomeIcon icon={faCircleXmark} className="h-6" />
+                              </button>
+                            </div>
+
+
                             <div className="grid lg:grid-cols-1 md:grid-cols-1  mt-2 px-5 py-3 ">
                               <div className="lg:grid-cols-3 md:grid-cols-3 sm:grid-col-1 my-3 space-x-3">
                                 <button
-                                  className={`border  ${
-                                    currentPage === "user"
-                                      ? "bg-blue-500 text-white"
-                                      : "hover:bg-gray-100"
-                                  } p-2`}
+                                  className={`border px-3 py-2 rounded-1 ${currentPage === "user" ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                                    }`}
                                   onClick={() => PageChange("user")}
                                 >
-                                  User Booking
+                                  <FontAwesomeIcon icon={faUser} />
+                                  <span className="ml-2">User Booking</span>
                                 </button>
                                 <button
-                                  className={`border  ${
-                                    currentPage === "internal"
-                                      ? "bg-blue-500 text-white"
-                                      : "hover:bg-gray-100"
-                                  } p-2`}
+                                  className={`border px-3 py-2 rounded-1 ${currentPage === "internal" ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                                    }`}
                                   onClick={() => PageChange("internal")}
                                 >
-                                  Internal Use
+                                  <FontAwesomeIcon icon={faHouseUser} />
+                                  <span className="ml-2">Internal Use</span>
                                 </button>
                                 <button
-                                  className={`border  ${
-                                    currentPage === "unavailable"
-                                      ? "bg-blue-500 text-white"
-                                      : "hover:bg-gray-100"
-                                  } p-2`}
+                                  className={`border px-3 py-2 rounded-1 ${currentPage === "unavailable" ? "bg-blue-500 text-white" : "hover:bg-gray-100"
+                                    }`}
                                   onClick={() => PageChange("unavailable")}
                                 >
-                                  Unavailable
+                                  <FontAwesomeIcon icon={faBan} />
+                                  <span className="ml-2">Unavailable</span>
                                 </button>
                               </div>
+
                               <div className="my-2 mt-4">
                                 <label
                                   className="text-sm"
@@ -1078,6 +1138,8 @@ export default function AdminResource() {
                                         placeholder="e.g Sally"
                                         aria-label="Recipient's username"
                                         aria-describedby="basic-addon2"
+                                        required
+
                                       />
                                     </div>
                                   </div>
@@ -1089,12 +1151,15 @@ export default function AdminResource() {
                                         value={newEvent && newEvent.start}
                                         onChange={getEventData}
                                       >
+
                                         <option
                                           value={newEvent && newEvent.start}
+
                                         >
-                                          {newEvent && newEvent.start}
+                                          From
+                                          <span> {newEvent && newEvent.start}</span>
                                         </option>
-                                        <option value="12:00 AM">
+                                        <option value="12:00 ">
                                           12:00 AM
                                         </option>
                                         <option value="12:30 AM">
@@ -1177,8 +1242,8 @@ export default function AdminResource() {
                                       >
                                         <option
                                           value={newEvent && newEvent.end}
-                                        >
-                                          {newEvent && newEvent.end}
+                                        > To
+                                          <span> {newEvent && newEvent.end}</span>
                                         </option>
                                         <option value="12:00 AM">
                                           12:00 AM
@@ -1256,16 +1321,54 @@ export default function AdminResource() {
                                     </div>
                                   </div>
                                 </div>
+
+                                <label
+                                  className="text-sm"
+                                  for="Days"
+                                >
+                                  REPEAT
+                                </label>
+                                <div className="my-2 grid lg:grid-cols-2 md:grid-cols-2 space-x-2 my-3">
+                                  <div className="">
+                                    <select
+                                      className="form-control rounded-0"
+                                      value={newEvent && newEvent}
+                                      onChange={getEventData}
+                                      name="end"
+                                    >
+                                      <option
+                                        value={newEvent && newEvent.none}
+                                      > None
+                                        <span> {newEvent && newEvent.none}</span>
+                                      </option>
+                                      <option value="None">
+                                        None
+                                      </option>
+                                      <option value="Daily">
+                                        Daily
+                                      </option>
+                                      <option value="Weekly">Weekly</option>
+                                      <option value="Monthly">Monthly</option>
+                                      <option value="Yearly">Yearly</option>
+
+                                    </select>
+                                  </div>
+                                </div>
+
                               </div>
+
                               <div className="mb-2">
                                 <FormControl sx={{ width: "100%" }}>
                                   <label
                                     className="text-sm my-2  "
                                     for="exampleInputEmail1"
                                   >
+
                                     SPACES
                                   </label>
+                                  {/* <FontAwesomeIcon icon={faGrip} className="h-6" /> */}
                                   <Select
+
                                     labelId="select-multiple-checkbox-label"
                                     id="select-multiple-checkbox"
                                     multiple
@@ -1418,8 +1521,7 @@ export default function AdminResource() {
           </div>
         </Dialog>
       </Transition.Root>
-
-      <Calendar
+      {/* <Calendar
         defaultDate={defaultDate}
         // defaultView={Views.WEEK}
         events={myEvents}
@@ -1444,8 +1546,41 @@ export default function AdminResource() {
           month: true, // Enable month view
         }}
         messages={{}}
-        // slotPropGetter={slotPropGetter}
+      // slotPropGetter={slotPropGetter}
+      /> */}
+
+      <Calendar
+        defaultDate={defaultDate}
+        // defaultView={Views.WEEK}
+        events={myEvents}
+        localizer={localizer}
+        resourceIdAccessor="_id"
+        resources={resource}
+        resourceTitleAccessor="name"
+        step={30}
+        // resourceComponent={ResourceComponent}
+        //   min={new Date().setHours(0, 0, 0)}
+        // max={new Date().setHours(21, 59, 59)}
+        // onSelectEvent={handleSelectEvent}
+        // onSelectSlot={selecting}
+        // onSelecting={handleSelect}
+        onSelectEvent={Booked}
+        onSelectSlot={handleSelect}
+        components={components}
+        selectable
+        popup={CustomPopup}
+        scrollToTime={scrollToTime}
+        views={{
+          week: CustomView, // Use your custom component here
+          day: true, // Enable day view
+          month: true, // Enable month view
+        }}
+        messages={{}}
+      // slotPropGetter={slotPropGetter}
       />
+
+      <div>    <button>gggggggggggggggggggggggggggggggggggggg</button>
+      </div>
     </Fragment>
   );
 }
