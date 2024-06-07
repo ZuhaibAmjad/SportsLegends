@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import InputBase from "@mui/material/InputBase";
 import { styled } from "@mui/material/styles";
 import { Delete } from "@mui/icons-material";
+import { AddCircleOutline } from "@mui/icons-material";
 import {
   Checkbox,
   FormControl,
@@ -323,6 +324,7 @@ export default function Availibilty() {
           onClick={handleAddRule}
           className="p-2 border my-2 bg-green-400 hover:bg-green-700 hover:text-white rounded-1 "
         >
+           <AddCircleOutline className="mr-2" />
           Add Rule
         </button>
       </div>

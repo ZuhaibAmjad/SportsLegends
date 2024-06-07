@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPencil,
   faCircleUser,
-  faSquareRss,
+  faGrip,
+  faBellSlash,
+  faMapLocation,
+  faCertificate,
+  faMoneyBillWave,
+  faStopwatch,
+  faLeftRight,
+  faRightToBracket,
+
 } from "@fortawesome/free-solid-svg-icons";
 import AdminSideBar from "../../Components/AdminSideBar";
 import Navbar from "../../Components/Navbar";
@@ -56,20 +63,20 @@ export default function Setting() {
             <div className="h-full overflow-y-auto overflow-x-hidden">
               {/* Fixed content goes here */}
               <div className="px-2 py-4">
-                <div className="p-2">
+                <div className="p-2 px-4">
                   <p className="text-xl font-semibold">
                     <FontAwesomeIcon icon={faCircleUser} className="mr-3 " />
                     SETTINGS
                   </p>
                 </div>
-                <p className="text-lg text-gray-600 p-2">YOUR VENUE</p>
+                <p className="text-lg text-gray-600 p-2 mx-5">YOUR VENUE</p>
                 <button
                   className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "spaces" ? "bg-gray-300" : ""
                     }`}
                   onClick={() => handleButtonClick('spaces')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faPencil} className="h-6" />
+                    <FontAwesomeIcon icon={faGrip} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">Spaces</h3>
@@ -84,7 +91,7 @@ export default function Setting() {
                   onClick={() => handleButtonClick('availibility')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                    <FontAwesomeIcon icon={faBellSlash} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">
@@ -99,7 +106,7 @@ export default function Setting() {
                   onClick={() => handleButtonClick('maps')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                    <FontAwesomeIcon icon={faMapLocation} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">
@@ -110,14 +117,14 @@ export default function Setting() {
                     </p>
                   </div>
                 </button>
-                <p className="text-lg text-gray-600 p-2">RULES</p>
+                <p className="text-lg text-gray-600 p-2 mx-5">RULES</p>
                 <button
                   className={`flex p-2 space-x-3 ml-4  w-100  ${Show === "conditionsbooking" ? "bg-gray-300" : ""
                     }`}
                   onClick={() => handleButtonClick('conditionsbooking')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                    <FontAwesomeIcon icon={faCertificate} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">
@@ -133,7 +140,7 @@ export default function Setting() {
                   onClick={() => handleButtonClick('addprices')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                    <FontAwesomeIcon icon={faMoneyBillWave} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">
@@ -150,7 +157,7 @@ export default function Setting() {
                   onClick={() => handleButtonClick('quota')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                    <FontAwesomeIcon icon={faStopwatch} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">Quotas</h3>
@@ -165,7 +172,7 @@ export default function Setting() {
                   onClick={() => handleButtonClick('buffer')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                    <FontAwesomeIcon icon={faLeftRight} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500  mb-1 text-start">
@@ -182,7 +189,7 @@ export default function Setting() {
                   onClick={() => handleButtonClick('bookingwindow')}
                 >
                   <div className="">
-                    <FontAwesomeIcon icon={faSquareRss} className="h-6" />
+                    <FontAwesomeIcon icon={faRightToBracket} className="h-6" />
                   </div>
                   <div className="">
                     <h3 className="text-blue-500 mb-1 text-start">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import { AddCircleOutline } from "@mui/icons-material";
 
 export default function QuotaRules() {
   const [rules, setRules] = useState([]);
@@ -368,6 +369,7 @@ export default function QuotaRules() {
         </div>
         {/* ))} */}
         <button className="bg-green-400 hover:bg-green-700 p-2 text-white rounded-1 ">
+        <AddCircleOutline className="mr-2" />
           Add a quota rule
         </button>
       </div>

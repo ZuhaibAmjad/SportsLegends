@@ -7,6 +7,11 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import RegisterPopUp from "./RegisterPopUp";
+import ProfileIcon from "../assets/ProfileIcon";
+import BookingsIcon from "../assets/BookingsIcon";
+import DashboardIcon from "../assets/DashboardIcon";
+import UsersIcon from "../assets/UsersIcon";
+import SettingsIcon from "../assets/SettingsIcon";
 
 export default function UserSideBar() {
   const [ register,setRegister ]=useState(false);
@@ -17,7 +22,8 @@ export default function UserSideBar() {
         <Link to="/">
           <Tooltip title="Delete">
             <IconButton>
-            <FontAwesomeIcon className="text-white" icon={faBook} />
+            {/* <FontAwesomeIcon className="text-white" icon={faBook} /> */}
+            < BookingsIcon />
             </IconButton>
           </Tooltip>
         </Link>
@@ -42,7 +48,8 @@ export default function UserSideBar() {
             <Menu.Button className="relative flex bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
               <span className="absolute -inset-1.5" />
               <span className="sr-only">Open user menu</span>
-              <FontAwesomeIcon style={{ color: "white" }} className="h-6 w-6" icon={faUser} />
+              {/* <FontAwesomeIcon style={{ color: "white" }} className="h-6 w-6" icon={faUser} /> */}
+              < ProfileIcon />
             </Menu.Button>
           </div>
           <Transition
@@ -80,3 +87,4 @@ export default function UserSideBar() {
     </div>
   );
 }
+

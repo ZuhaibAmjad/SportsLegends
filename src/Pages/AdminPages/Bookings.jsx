@@ -108,7 +108,8 @@ export default function AdminResource() {
   const [filter, setFilter] = useState(false);
 
   const [newEvent, setNewEvent] = useState({
-    date: "",
+    date:new Date().toISOString().split('T')[0],
+
     title: "",
     start: "",
     end: "",
@@ -1579,8 +1580,8 @@ export default function AdminResource() {
       // slotPropGetter={slotPropGetter}
       />
 
-      <div>    <button>gggggggggggggggggggggggggggggggggggggg</button>
-      </div>
+
+      
     </Fragment>
   );
 }
