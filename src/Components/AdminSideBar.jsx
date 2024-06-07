@@ -50,7 +50,7 @@ export default function AdminSideBar() {
   return (
     <div className="flex justify-between flex-col bg-blue-500 p-2">
       <div className="flex flex-col space-y-2 items-center">
-        <Link className="text-white" to="/admin/booking">LOGO</Link>
+        <Link className="text-white" to="/admin/booking">Logo</Link>
         <Link to="/admin/booking">
           <Tooltip title="Bookings">
             <IconButton>
