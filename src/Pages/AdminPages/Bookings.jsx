@@ -320,6 +320,9 @@ export default function AdminResource() {
 
   const CustomToolbar = React.memo(({ label, onNavigate, onView, showHeader }) => {
     const [activeTab, setActiveTab] = useState("day");
+    useEffect(() => {
+      onView("day");
+    }, [onView])
     const handleTabClick = (view) => {
       setActiveTab(view);
       onView(view);
@@ -498,6 +501,8 @@ export default function AdminResource() {
       </>
     );
   });
+
+  
 
   const closeHeader = () => {
     setShowHeader(false);
