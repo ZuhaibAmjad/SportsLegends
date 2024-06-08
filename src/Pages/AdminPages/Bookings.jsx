@@ -766,21 +766,23 @@ export default function AdminResource() {
     const event = {
       start,
       end,
-      resourceId
+      resourceId,
+      isNew: true
     }
 
-
-    // if (title)
-    setMyEvents([
-      ...myEvents,
-      {
-        start,
-        end,
-        // title,
-        resourceId
+    setMyEvents((pre) => {
+      const newItem = pre.find((item) => item.isNew === true)
+      if (newItem) {
+       return pre.map((item) => {
+          return item.isNew ? event : item
+        })
+      } else {
+        return [
+          ...myEvents,
+          event
+        ]
       }
-    ]);
-
+    })
     let price;
     setSelectedEvent(event);
     if (selectedItems && selectedItems.length >= 1) {
@@ -1002,12 +1004,87 @@ export default function AdminResource() {
     );
   };
 
-  const onEventDrop = ({ event, start, end, resourceId }) => {
-    setMyEvents((prevEvents) =>
-      prevEvents.map((ev) =>
-        ev.id === event.id ? { ...ev, start, end, resourceId } : ev
-      )
+  const onEventDrop = ({ start, end, resourceId }) => {
+
+    const event = {
+      start, end, resourceId
+    }
+
+    console.log("event ", start, end, resourceId)
+
+
+
+    // if (title)
+    // setMyEvents([
+    //   ...myEvents,
+    //   {
+    //     start,
+    //     end,
+    //     // title,
+    //     resourceId
+    //   }
+    // ]);
+
+    setMyEvents((pre) => {
+      return pre.map((item) => {
+        return item.isNew ? {
+          start,
+          end,
+          resourceId,
+          isNew: true
+        } : item
+      })
+    })
+
+    let price;
+    setSelectedEvent(event);
+    if (selectedItems && selectedItems.length >= 1) {
+      selectedItems.shift();
+    }
+    selectedItems.push(event?.resourceId);
+
+    const selectedResource = resource.find(
+      (resource) => resource._Id === event?.resourceId
     );
+
+    if (selectedResource) {
+      price = selectedResource.resourcePrice;
+    } else {
+      price = 0;
+    }
+
+    const startDate = new Date(event?.start);
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, "0"); // Adding 1 to month since it starts from 0
+    const day = String(startDate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    // setSelectedEvent({
+    //   ...selectedEvent,
+    //   date: formattedDate,
+    // })
+
+    setNewEvent({
+      ...newEvent,
+      price: price,
+      resourceId: event?.resourceId,
+      date: formattedDate,
+      id: uuidv4(),
+      isNew: true,
+    });
+    console.log(event);
+    // setMyEvents(prevEvents => [...prevEvents, { ...newEvent, start: startDate, end: endDate }]);
+    setShowHeader(() => {
+
+      console.log("dfsdfsdfsdfsdfsdfdsfdsfsdfds")
+      return true
+    });
+    setAddingEvent(true);
+    // setMyEvents((prevEvents) =>
+    //   prevEvents.map((ev) =>
+    //     ev.isNew ? { ...ev, start: event, end, resourceId: event.resourceId } : ev
+    //   )
+    // );
     setAddingEvent(false);
   };
 
