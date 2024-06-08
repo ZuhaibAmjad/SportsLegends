@@ -502,7 +502,7 @@ export default function AdminResource() {
     );
   });
 
-  
+
 
   const closeHeader = () => {
     setShowHeader(false);
@@ -510,7 +510,8 @@ export default function AdminResource() {
 
     if (myEvents && myEvents.length > 0) {
       setMyEvents((pre) => {
-        return pre.filter((item) => item.isNew)
+        console.log("akjdhajakf", pre.filter((item) => item.isNew === true))
+        return pre.filter((item) => item.isNew !== true)
       })
     }
   };
