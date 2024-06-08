@@ -9,7 +9,6 @@ import React, {
 
 import { v4 as uuidv4 } from 'uuid';
 
-
 import PropTypes from "prop-types";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -28,6 +27,7 @@ import {
 } from "react-big-calendar";
 import moment from "moment";
 
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -51,8 +51,9 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import DatePicker from "@mui/lab/DatePicker";
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import { styled, alpha } from "@mui/material/styles";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
-const localizer = momentLocalizer(moment);
+
 const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
@@ -96,6 +97,11 @@ const StyledMenu = styled((props) => (
   },
 }));
 
+const localizer = momentLocalizer(moment);
+const DnDCalendar = withDragAndDrop(Calendar);
+
+
+
 export default function AdminResource() {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
@@ -108,7 +114,7 @@ export default function AdminResource() {
   const [filter, setFilter] = useState(false);
 
   const [newEvent, setNewEvent] = useState({
-    date:new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split('T')[0],
 
     title: "",
     start: "",
@@ -120,6 +126,7 @@ export default function AdminResource() {
     userID: "",
   });
   const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [addingEvent, setAddingEvent] = useState(false);
 
   const cookies = new Cookies();
 
@@ -133,7 +140,6 @@ export default function AdminResource() {
       return acc;
     }, {});
 
-    console.log(resource, ">>>>>>>>>>>>>>>>>>>>>>");
 
     return (
       <div className="h-100 overflow-y-scroll p-2 w-full relative">
@@ -312,7 +318,7 @@ export default function AdminResource() {
   //   return range;
   // }
 
-  const CustomToolbar = ({ label, onNavigate, onView }) => {
+  const CustomToolbar = React.memo(({ label, onNavigate, onView, showHeader }) => {
     const [activeTab, setActiveTab] = useState("day");
     const handleTabClick = (view) => {
       setActiveTab(view);
@@ -328,6 +334,7 @@ export default function AdminResource() {
     const handleNextt = () => {
       handleNavigate("Nextt");
     };
+
     return (
       <>
         {showHeader ? (
@@ -471,16 +478,17 @@ export default function AdminResource() {
         }
       </>
     );
-  };
+  });
 
   const closeHeader = () => {
     setShowHeader(false);
     setSelectedEvent(null);
-    // if (myEvents && myEvents.length > 0) {
-    //   const updatedEvents = [...myEvents]; // Create a copy of the array
-    //   updatedEvents.pop(); // Remove the last element
-    //   setMyEvents(updatedEvents);
-    // }
+
+    if (myEvents && myEvents.length > 0) {
+      setMyEvents((pre) => {
+        return pre.filter((item) => item.isNew)
+      })
+    }
   };
 
   const getSpaces = async () => {
@@ -627,7 +635,8 @@ export default function AdminResource() {
           ...event,
           id: event._id,
           end: new Date(event.end),
-          start: new Date(event.start), // Convert start to a Date object
+          start: new Date(event.start),
+          isNew: false
         }));
         console.log(modifiedEvents, "Result");
 
@@ -795,8 +804,6 @@ export default function AdminResource() {
     const day = String(startDate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
 
-    console.log(formattedDate);
-
     // setSelectedEvent({
     //   ...selectedEvent,
     //   date: formattedDate,
@@ -808,10 +815,16 @@ export default function AdminResource() {
       resourceId: event?.resourceId,
       date: formattedDate,
       id: uuidv4(),
+      isNew: true,
     });
     console.log(event);
     // setMyEvents(prevEvents => [...prevEvents, { ...newEvent, start: startDate, end: endDate }]);
-    setShowHeader(true);
+    setShowHeader(() => {
+
+      console.log("dfsdfsdfsdfsdfsdfdsfdsfsdfds")
+      return true
+    });
+    setAddingEvent(true);
   };
 
 
@@ -891,13 +904,6 @@ export default function AdminResource() {
     }
   };
 
-  const components = {
-    event: CustomEventWrapper,
-    month: {
-      event: CustomMonthEvent,
-    },
-    toolbar: CustomToolbar,
-  };
 
   const { defaultDate, scrollToTime } = useMemo(
     () => ({
@@ -907,47 +913,7 @@ export default function AdminResource() {
     []
   );
 
-  const selecting = (event, date) => {
-    let price;
-    setSelectedEvent(event);
-    if (selectedItems && selectedItems.length >= 1) {
-      selectedItems.shift();
-    }
-    selectedItems.push(event.resourceId);
 
-    const selectedResource = resource.find(
-      (resource) => resource._Id === event.resourceId
-    );
-
-    if (selectedResource) {
-      price = selectedResource.resourcePrice;
-    } else {
-      price = 0;
-    }
-
-    const startDate = new Date(event.start);
-    const year = startDate.getFullYear();
-    const month = String(startDate.getMonth() + 1).padStart(2, "0"); // Adding 1 to month since it starts from 0
-    const day = String(startDate.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-
-    console.log(formattedDate);
-
-    // setSelectedEvent({
-    //   ...selectedEvent,
-    //   date: formattedDate,
-    // })
-
-    setNewEvent({
-      ...newEvent,
-      price: price,
-      resourceId: event.resourceId,
-      date: formattedDate,
-    });
-    console.log(event);
-
-    setShowHeader(true);
-  };
 
   const getEventData = (e) => {
     console.log("Run");
@@ -991,6 +957,7 @@ export default function AdminResource() {
   const closeDailog = () => {
     setOpen(false);
     setShowHeader(false);
+    closeHeader()
     setSelectedItems([]);
     setNewEvent({
       date: "",
@@ -1024,6 +991,26 @@ export default function AdminResource() {
   useEffect(() => {
     console.log(myEvents);
   }, [myEvents]);
+
+
+  const onEventResize = (data) => {
+    const { start, end } = data;
+    setMyEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.id === data.event.id ? { ...event, start, end } : event
+      )
+    );
+  };
+
+  const onEventDrop = ({ event, start, end, resourceId }) => {
+    setMyEvents((prevEvents) =>
+      prevEvents.map((ev) =>
+        ev.id === event.id ? { ...ev, start, end, resourceId } : ev
+      )
+    );
+    setAddingEvent(false);
+  };
+
 
   return (
     <Fragment>
@@ -1549,39 +1536,38 @@ export default function AdminResource() {
         messages={{}}
       // slotPropGetter={slotPropGetter}
       /> */}
-
-      <Calendar
-        defaultDate={defaultDate}
-        // defaultView={Views.WEEK}
+      <DnDCalendar
+        defaultView="day"
         events={myEvents}
-        localizer={localizer}
-        resourceIdAccessor="_id"
-        resources={resource}
         resourceTitleAccessor="name"
-        step={30}
-        // resourceComponent={ResourceComponent}
-        //   min={new Date().setHours(0, 0, 0)}
-        // max={new Date().setHours(21, 59, 59)}
-        // onSelectEvent={handleSelectEvent}
-        // onSelectSlot={selecting}
-        // onSelecting={handleSelect}
+        resources={resource}
+        resourceIdAccessor="_id"
+        localizer={localizer}
+        onEventDrop={onEventDrop}
+        onEventResize={onEventResize}
         onSelectEvent={Booked}
         onSelectSlot={handleSelect}
-        components={components}
-        selectable
+        components={{
+          event: CustomEventWrapper,
+          month: {
+            event: CustomMonthEvent,
+          },
+          toolbar: (toolbarProps) => <CustomToolbar {...toolbarProps} showHeader={showHeader} />,
+
+        }}
         popup={CustomPopup}
+        resizable
+        selectable
         scrollToTime={scrollToTime}
         views={{
           week: CustomView, // Use your custom component here
           day: true, // Enable day view
           month: true, // Enable month view
         }}
-        messages={{}}
-      // slotPropGetter={slotPropGetter}
+        style={{ height: "100vh" }}
       />
 
 
-      
     </Fragment>
   );
 }

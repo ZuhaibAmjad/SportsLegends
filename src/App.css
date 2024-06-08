@@ -1,0 +1,45 @@
+
+
+/* Override default drag and drop icons */
+.rbc-addons-dnd .rbc-addons-dnd-resize-anchor::after {
+    content: "⇱"; /* Change resize icon */
+  }
+  
+  .rbc-addons-dnd .rbc-addons-dnd-draggable {
+    cursor: move; /* Change cursor for draggable events */
+  }
+  
+  .rbc-month-view .rbc-date-cell:hover {
+    background-color: lightgray;
+  }
+  
+  /* Show time on hover */
+  .rbc-event {
+    position: relative;
+  }
+  
+  /* Custom styles for slots
+  .custom-slot {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  } */
+  
+  /* Custom styles for selected slots */
+  /* .custom-slot.selected {
+    background-color: lightblue;
+    border-color: blue;
+  } */
+  
+
+
+  .resize-handle {
+    /* Add your custom styles for resize handles */
+    width: 10px;
+    height: 10px;
+    background-color: red; /* Example color */
+    border: 1px solid black;
+    border-radius: 50%;
+  }
