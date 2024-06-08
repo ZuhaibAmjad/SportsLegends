@@ -8,12 +8,17 @@ import React, {
 } from "react";
 
 import { v4 as uuidv4 } from 'uuid';
+import AddIcon from "../../assets/AddIcon";
+import {Radio, RadioGroup, Input} from "@mui/material";
+
+
 
 import PropTypes from "prop-types";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Checkbox,
   FormControl,
+  FormControlLabel,
   Menu,
   MenuItem,
   Select,
@@ -292,11 +297,11 @@ export default function AdminResource() {
         <div className="fixed bottom-8 right-12 ">
           <button
             className="bg-blue-500 text-white rounded-full p-2 shadow-lg"
-            onClick={() => {
-              // {Booked}
-            }}
+            onClick={Booked}
           >
-            <FontAwesomeIcon icon={faPlus} className="text-4xl " />
+            {/* <FontAwesomeIcon icon={faPlus} className="text-4xl " /> */}
+            < AddIcon className="text-white h-6 w-6"/>
+            
           </button>
         </div>
       </div>
@@ -1113,7 +1118,17 @@ export default function AdminResource() {
     setAddingEvent(false);
   };
 
+  const [repeatOption, setRepeatOption] = useState('');
+  const [dailyOption, setDailyOption] = useState('Weekdays');
 
+  const handleRepeatChange = (e) => {
+    setRepeatOption(e.target.value);
+    getEventData(e);
+  };
+
+  const handleDailyChange = (e) => {
+    setDailyOption(e.target.value);
+  };
   return (
     <Fragment>
       <style>
@@ -1412,15 +1427,15 @@ export default function AdminResource() {
                                   </div>
                                 </div>
 
-                                <label
+                                {/* <label
                                   className="text-sm"
                                   for="Days"
                                 >
                                   REPEAT
-                                </label>
+                                </label> */}
                                 <div className="my-2 grid lg:grid-cols-2 md:grid-cols-2 space-x-2 my-3">
                                   <div className="">
-                                    <select
+                                    {/* <select
                                       className="form-control rounded-0"
                                       value={newEvent && newEvent}
                                       onChange={getEventData}
@@ -1441,7 +1456,92 @@ export default function AdminResource() {
                                       <option value="Monthly">Monthly</option>
                                       <option value="Yearly">Yearly</option>
 
-                                    </select>
+                                    </select> */}
+                                    <div className="grid lg:grid-cols-1 md:grid-cols-1 my-3">
+                                <div className="">
+                                  <FormControl fullWidth>
+                                    <label htmlFor="repeat" className="text-sm">
+                                      REPEAT
+                                    </label>
+                                    <Select
+                                    
+                                      labelId="repeat"
+                                      id="repeat"
+                                      value={repeatOption}
+                                      onChange={handleRepeatChange}
+                                      className="form-control rounded-1"
+                                      displayEmpty
+                                      inputProps={{ 'aria-label': 'Without label' }}
+                                    >
+                                      <MenuItem value="">
+                                        <em>None</em>
+                                      </MenuItem>
+                                      <MenuItem value="Daily">Daily</MenuItem>
+                                      <MenuItem value="Weekly">Weekly</MenuItem>
+                                      <MenuItem value="Weekly">Monthly</MenuItem>
+                                      <MenuItem value="Yearly">Yearly</MenuItem>
+                                    </Select>
+                                  </FormControl>
+                                </div>
+                                {repeatOption && (
+                                  <div className="my-2">
+                                    {repeatOption === 'Daily' && (
+                                      <div>
+                                        <label className="text-sm required">Daily Rule</label>
+                                        <RadioGroup value={dailyOption} onChange={handleDailyChange}>
+                                          <FormControlLabel value="Weekdays" control={<Radio />} label="Monday to Friday" />
+                                          <FormControlLabel value="Weekends" control={<Radio />} label="Saturday & Sunday" />
+                                        </RadioGroup>
+                                      </div>
+                                    )}
+                                    {repeatOption === 'Weekly' && (
+                                      <div>
+                                        <label className="text-sm">Repeat every</label>
+                                        <Input type="number" name="weeklyInterval" value={newEvent.weeklyInterval} onChange={getEventData} className="form-control rounded-0" />
+                                        <label className="text-sm">weeks</label>
+                                      </div>
+                                    )}
+                                    {repeatOption === 'Monthly' && (
+                                      <div>
+                                        <label className="text-sm">Repeat every</label>
+                                        <Input type="number" name="monthlyInterval" value={newEvent.monthlyInterval} onChange={getEventData} className="form-control rounded-0" />
+                                        <label className="text-sm">months</label>
+                                      </div>
+                                    )}
+                                    {repeatOption === 'Yearly' && (
+                                      <div>
+                                        <label className="text-sm">Repeat every</label>
+                                        <Input type="number" name="yearlyInterval" value={newEvent.yearlyInterval} onChange={getEventData} className="form-control rounded-0" />
+                                        <label className="text-sm">years</label>
+                                      </div>
+                                    )}
+                                    <div className="my-2">
+                                      <label htmlFor="endRepeat" className="text-sm">
+                                        End Repeat
+                                      </label>
+                                      <input
+                                        type="date"
+                                        id="endRepeat"
+                                        name="endRepeat"
+                                        value={newEvent.endRepeat}
+                                        onChange={getEventData}
+                                        className="form-control rounded-0"
+                                        required
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="my-2">
+                                {/* <Checkbox
+                                  checked={selectedItems.includes(resource.id)}
+                                  onChange={(e) => handleCheckboxChange(e, resource.id)}
+                                  inputProps={{ 'aria-label': 'controlled' }}
+                                /> */}
+                                <label className="text-sm ml-2">{resource.name}</label>
+                              </div>
+
                                   </div>
                                 </div>
 
