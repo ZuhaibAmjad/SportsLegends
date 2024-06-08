@@ -107,8 +107,6 @@ export default function AdminResource() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [filter, setFilter] = useState(false);
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-
   const [newEvent, setNewEvent] = useState({
     date:new Date().toISOString().split('T')[0],
 
@@ -121,6 +119,7 @@ export default function AdminResource() {
     paymentStatus: "",
     userID: "",
   });
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
 
   const cookies = new Cookies();
 
@@ -138,7 +137,8 @@ export default function AdminResource() {
 
     return (
       <div className="h-100 overflow-y-scroll p-2 w-full relative">
-         <div className="flex justify-between w-full">
+
+        <div className="flex justify-between w-full">
           <div className="flex">
             <StyledMenu
               id="demo-customized-menu"
@@ -147,7 +147,7 @@ export default function AdminResource() {
               }}
               anchorEl={anchorEl}
               open={filter}
-              onClose={() => setFilter(false)} // Change
+              onClose={hidePopup}
             >
               <MenuItem
                 // onClick={hidePopup}
@@ -296,8 +296,9 @@ export default function AdminResource() {
       </div>
     );
   };
-  CustomView.title = () => null;
-  
+  CustomView.title = () => {
+    return null;
+  };
 
   // CustomView.range = (start, end, localizer) => {
   //   const range = [];
@@ -315,7 +316,7 @@ export default function AdminResource() {
     const [activeTab, setActiveTab] = useState("day");
     useEffect(() => {
       onView("day");
-    }, [onView]);
+    }, [onView])
     const handleTabClick = (view) => {
       setActiveTab(view);
       onView(view);
@@ -345,13 +346,9 @@ export default function AdminResource() {
             </div>
             <div className="flex justify-center items-center ">
               <FontAwesomeIcon className="h-5 mr-3" icon={faClock} />
-              {/* <span className="border-r-2 border-gray-500 pr-3">
+              <span className="border-r-2 border-gray-500 pr-3">
                 {moment(selectedEvent && selectedEvent.start).format("h:mm A")}{" "}
                 - {moment(selectedEvent && selectedEvent.end).format("h:mm A")}
-              </span> */}
-              <span className="border-r-2 border-gray-500 pr-3">
-                {moment(selectedEvent?.start).format("h:mm A")}
-                 - {moment(selectedEvent?.end).format("h:mm A")}
               </span>
             </div>
             <div className="flex justify-center items-center">
@@ -370,15 +367,13 @@ export default function AdminResource() {
             </div>
 
             <div className=" pr-3 flex justify-center items-center">
-              {/* {newEvent && newEvent.price} */}
-              <span>{selectedEvent?.price}</span>
+              {newEvent && newEvent.price}
             </div>
             <div className="border p-2  flex justify-center items-center bg-green-400 hover:bg-green-600 text-white px-4">
               <button onClick={Booked}>Book</button>
             </div>
             <div className="border border-black p-2  flex justify-center items-center hover:bg-gray-600 hover:text-white">
               <button onClick={closeHeader}>Cancel</button>
-              <span>{selectedEvent?.title}</span>
             </div>
           </div>
         ) : (
@@ -1037,7 +1032,6 @@ export default function AdminResource() {
 
   return (
     <Fragment>
-
       <style>
         {`
             .hoverable-slot:hover {
@@ -1533,7 +1527,34 @@ export default function AdminResource() {
           </div>
         </Dialog>
       </Transition.Root>
-     
+      {/* <Calendar
+        defaultDate={defaultDate}
+        // defaultView={Views.WEEK}
+        events={myEvents}
+        localizer={localizer}
+        resourceIdAccessor="_id"
+        resources={resource}
+        resourceTitleAccessor="name"
+        step={30}
+        // resourceComponent={ResourceComponent}
+        //   min={new Date().setHours(0, 0, 0)}
+        // max={new Date().setHours(21, 59, 59)}
+        // onSelectEvent={handleSelectEvent}
+        onSelectSlot={selecting}
+        onSelecting={selecting}
+        components={components}
+        selectable
+        popup={CustomPopup}
+        scrollToTime={scrollToTime}
+        views={{
+          week: CustomView, // Use your custom component here
+          day: true, // Enable day view
+          month: true, // Enable month view
+        }}
+        messages={{}}
+      // slotPropGetter={slotPropGetter}
+      /> */}
+
       <Calendar
         defaultDate={defaultDate}
         // defaultView={Views.WEEK}
