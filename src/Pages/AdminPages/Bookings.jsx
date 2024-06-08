@@ -1535,15 +1535,33 @@ export default function AdminResource() {
       </Transition.Root>
      
       <Calendar
+        defaultDate={defaultDate}
+        // defaultView={Views.WEEK}
         events={myEvents}
         localizer={localizer}
-        defaultView={Views.DAY}
-        components={{ toolbar: CustomToolbar, day: CustomView, week: CustomView, month: CustomView, CustomView }}
-        selectable
-        onSelectEvent={handleEventClick}
+        resourceIdAccessor="_id"
+        resources={resource}
+        resourceTitleAccessor="name"
+        step={30}
+        // resourceComponent={ResourceComponent}
+        //   min={new Date().setHours(0, 0, 0)}
+        // max={new Date().setHours(21, 59, 59)}
+        // onSelectEvent={handleSelectEvent}
+        // onSelectSlot={selecting}
+        // onSelecting={handleSelect}
+        onSelectEvent={Booked}
         onSelectSlot={handleSelect}
-        onNavigate={(date) => setSelectedDate(date)}
-        onView={(view) => setCurrentView(view)}
+        components={components}
+        selectable
+        popup={CustomPopup}
+        scrollToTime={scrollToTime}
+        views={{
+          week: CustomView, // Use your custom component here
+          day: true, // Enable day view
+          month: true, // Enable month view
+        }}
+        messages={{}}
+      // slotPropGetter={slotPropGetter}
       />
 
 
