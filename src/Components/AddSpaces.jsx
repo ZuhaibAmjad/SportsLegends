@@ -340,11 +340,12 @@ export default function AddSpaces() {
                 onClick={() => setSelectedSpace(space)}
               >
                 {space.name}
+
               </button>
             ))}
           </div>
         </div>
-        <div className="w-full md:w-2/3 md:flex-grow bg-white border border-gray-300 rounded-1">
+        <div className="w-full md:w-2/3 md:flex-grow bg-white border border-gray-300 rounded-5">
           <div className="flex grid lg:grid-cols-2 md:grid-cols-1 mt-2 p-3 gap-x-3 ">
             <div className="space-y-2">
               <label className="text-sm" for="exampleInputEmail1">
