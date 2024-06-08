@@ -325,16 +325,35 @@ export default function AdminResource() {
       onView(view);
     };
     const handleNavigate = (direction) => {
-      onNavigate(direction, activeTab);
+      onNavigate(direction);
     };
+    // const handleBack = () => {
+    //   handleNavigate("PREV");
+    // };
+
+    // const handleNextt = () => {
+    //   handleNavigate("PREV");
+    // };
+
+
+    // const onChange = (event) => {
+    //   const current = event.target.value;
+    //   onNavigate("DATE", moment().month(current).toDate());
+    //   setMonth(current);
+    // };
+
+
+
     const handleBack = () => {
-      handleNavigate("Back");
+      onNavigate("PREV");
     };
-
     const handleNextt = () => {
-      handleNavigate("Nextt");
+      onNavigate("NEXT");
     };
 
+    const goToToday = () => {
+      onNavigate("TODAY");
+    };
     return (
       <>
         {showHeader ? (
@@ -773,7 +792,7 @@ export default function AdminResource() {
     setMyEvents((pre) => {
       const newItem = pre.find((item) => item.isNew === true)
       if (newItem) {
-       return pre.map((item) => {
+        return pre.map((item) => {
           return item.isNew ? event : item
         })
       } else {
